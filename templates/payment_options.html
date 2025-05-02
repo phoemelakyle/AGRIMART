@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/css/payment_options.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+</head>
+<body>
+    <header>
+        <div class="Logout">
+            <form action="{{ url_for('add_product.logout') }}" method="post">
+                <button class="logout-button">LOGOUT</button>
+            </form>
+        </div>
+    </header>
+
+    <div class="left-container">
+        <button onclick="window.location.href='/homepage_seller'" style="color: white; font-size: 16px;">HOMEPAGE</button>
+        {% set url = url_for('seller_orders.unpaid_orders') %}
+        <button onclick="window.location.href='{{ url }}'" style="color: white; font-size: 16px;">ORDERS</button>
+        <button onclick="window.location.href='/add_product'" style="color: white; font-size: 16px;">ADD PRODUCT</button>
+        <button onclick="window.location.href='/payment_options'" style="color: burlywood; font-size: 16px;">PAYMENT OPTIONS</button>
+    </div>
+
+    <div class="container">
+        <form method="POST" action="{{ url_for('payment_options.payment_options') }}">
+            <h1>SELECT YOUR PAYMENT METHODS</h1>
+            <div class="payment-options">
+                {% for method in payment_methods %}
+                <div class="payment-option">
+                    <input class="custom-checkbox" type="checkbox" name="selected_payment_methods[]" value="{{ method[1] }}"
+                        {% if method[1] in selected_options_from_form %} checked {% endif %}
+                        onclick="toggleAccountNumber(this)">
+                
+                    <label>
+                        {% if method[1] == 'Cash on Delivery' %}
+                        {{ method[1] }}
+                        {% endif %}
+                        
+                        {% if method[1] in ['GCash', 'Paymaya', 'BDO', 'BPI'] %}
+                            <div class="payment-info">
+                                <img src="{{ url_for('static', filename='images/' + method[1] + '.png') }}" alt="{{ method[1] }}">
+                            </div>
+                            <div class="account-number" id="account_number_{{ method[1] }}">
+                                <label for="account_number_input_{{ method[1] }}">Account Number:</label>
+                                <input type="text" name="account_numbers[]-{{ method[1] }}" 
+                                    id="account_number_input_{{ method[1] }}" 
+                                    value="{{ selected_options_from_form.get(method[1], '') }}">
+                            </div>
+                        {% endif %}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+            <button type="submit">SAVE PAYMENT OPTIONS</button>
+        </form>
+    </div>
+
+    <script>
+        function toggleAccountNumber(checkbox) {
+            var methodName = checkbox.value;
+            var accountNumberDiv = document.getElementById('account_number_' + methodName);
+
+            console.log("Toggle function triggered");
+            console.log("Method Name:", methodName);
+            console.log("Checkbox Checked:", checkbox.checked);
+
+            if (methodName !== 'Cash on Delivery' && checkbox.checked) {
+                accountNumberDiv.style.display = 'block';
+            } else {
+                accountNumberDiv.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

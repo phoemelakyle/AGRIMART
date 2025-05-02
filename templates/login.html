@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/css/login.css">
+    <title>Login</title>
+</head>
+<body>
+    <header>
+        <div class="Register">
+            <form action="{{ url_for('login.index') }}" method="post">
+                <button class="register-button">REGISTER</button>
+            </form>
+        </div>
+    </header>
+    <div class="content">
+        <div class="logo">
+        </div>
+    </div>
+    <div class="container">
+        <div class="labelbox">
+        <h1>LOGIN</h1>
+        <div class="loginbox">
+            <form method="post" action="/login">
+            <div class="row">
+                <div class="col1">
+                    <label for="username">Username:</label>
+                </div>
+                <div class="col2">
+                    <input type="text" name="Username" id="username" required><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col1">
+                    <label for="password">Password:</label>
+                </div>
+                <div class="col2">
+                    <input type="password" name="Password" id="password" required><br>
+                </div>
+            </div>
+        <input type="submit" name="submit_button" value="Login">
+    </form>
+    {% if error_message %}
+    <div class="error_message">
+        {{ error_message }}
+    </div>
+    {% endif %}
+</body>
+</html>

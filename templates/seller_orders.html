@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/seller_orders.css') }}">
+</head>
+<body>
+    <header>
+        <div class="Logout">
+            <form action="{{ url_for('add_product.logout') }}" method="post">
+                <button class="logout-button">LOGOUT</button>
+            </form>
+        </div>
+    </header>
+    <div class="left-container">
+        <button onclick="window.location.href='/homepage_seller'" style="color: white; font-size: 16px;">HOMEPAGE</button>
+        {% set url = url_for('seller_orders.unpaid_orders') %}
+        <button onclick="window.location.href='{{ url }}'" style="color: burlywood; font-size: 16px;">ORDERS</button>
+        <button onclick="window.location.href='/add_product'" style="color: white; font-size: 16px;">ADD PRODUCT</button>
+        <button onclick="window.location.href='/payment_options'" style="color: white; font-size: 16px;">PAYMENT OPTIONS</button>
+    </div>
+    <div class="status-container">
+        <h3>STATUS</h3>
+        <form action="{{ url_for('seller_orders.unpaid_orders') }}" method="get">
+            <button type="submit" class="stat-button" name="selected_status" value="UNPAID">UNPAID</button>
+        </form>
+        <form action="{{ url_for('seller_orders.to_ship_orders') }}" method="get">
+            <button type="submit" class="stat-button" name="selected_status" value="TO_SHIP">TO SHIP</button>
+        </form>
+        <form action="{{ url_for('seller_orders.shipping_orders') }}" method="get">
+            <button type="submit" class="stat-button" name="selected_status" value="SHIPPING">SHIPPING</button>
+        </form>
+        <form action="{{ url_for('seller_orders.delivered_orders') }}" method="get">
+            <button type="submit" class="stat-button" name="selected_status" value="DELIVERED">COMPLETED</button>
+        </form>
+        <form action="{{ url_for('seller_orders.cancelled_orders') }}" method="get">
+            <button type="submit" class="stat-button" name="selected_status" value="CANCELLED">CANCELLED</button>
+        </form>
+    
+<script>
+  $(document).ready(function() {
+    $('.stat-button').on({
+      click: function() {
+        $(this).css({
+          'background-color': '#706233',
+          'color': ' white'
+        });
+      },
+      mouseenter: function() {
+        $(this).css({
+          'background-color': '#706233',
+          'color': ' white'
+        });
+      },
+      mouseleave: function() {
+      }
+    });
+  });
+</script>
+
+   </div>
+   <div class="order-container">
+        <div class="order-detail">
+            <div class="content">
+                <h1>
+                    {% if order_type == 'unpaid' %}
+                        UNPAID
+                    {% elif order_type == 'to_ship' %}
+                        TO SHIP
+                    {% elif order_type == 'shipping' %}
+                        SHIPPING
+                    {% elif order_type == 'cancelled' %}
+                        CANCELLED
+                    {% elif order_type == 'delivered' %}
+                        COMPLETED
+                    {% endif %}
+                </h1>
+            </div>
+        </div>
+       
+            {% if order_type == 'unpaid' %}
+                {% if order_details %}
+                    {% for order_detail in order_details %}
+                     <div class="orders">
+                        <div class="order-item">
+                            <div class="order-pic">
+                                <img src="{{ url_for('static', filename='images/products/' + order_detail['ImageFileName']) }}" alt="{{ order_detail['Product_Name'] }}" width="200" height="200">
+                            </div>
+                        </div>
+                        <div class="order-details">
+                            
+                                <p class="product-name">{{ order_detail['Product_Name'] }}</p>
+                                <p class="quantity"><strong>x</strong>{{ order_detail['Quantity'] }}</p>
+                                <p class="variation"><strong>Variation:</strong> {{ order_detail['Color'] }}, {{ order_detail['Size'] }}</p>
+                                <p class="price" style="color: black;"><strong>Price:</strong> P{{ order_detail['Price'] }}, <strong>Shipping Fee:</strong> P{{ order_detail['Shipping_Fee'] }}</p>    
+                                <p class="Total"><strong>Total:</strong> P{{ order_detail['Total_Amount'] }}</p>
+                                 <div class="shipping"><strong>Shipping Address:</strong> {{ order_detail['Shipping_Address'] }}</div>
+                            <p class="statuss"><strong>waiting for payment...<strong></p>
+                                <div class="cancel">
+                                  <form action="{{ url_for('seller_orders.cancel_unpaid_order', order_id=order_detail['OrderID']) }}" method="post">
+                                <button type="submit" class="cancel-order-button">CANCEL ORDER</button>
+                            </form>  
+                                </div>
+                        </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No orders yet! Place an order now!</p>
+                {% endif %}
+                     </div>
+
+            {% elif order_type == 'to_ship' %}
+                {% if order_details %}
+                    {% for order_detail in order_details %}
+                    <div class="orders">
+                        <div class="order-item">
+                            <div class="order-pic">
+                                <img src="{{ url_for('static', filename='images/products/' + order_detail['ImageFileName']) }}" alt="{{ order_detail['Product_Name'] }}" width="200" height="200">
+                            </div>
+                        </div>
+                        <div class="order-details">
+                            
+                            <p class="product-name">{{ order_detail['Product_Name'] }}</p>
+                            <p class="quantity"><strong>x</strong>{{ order_detail['Quantity'] }}</p>
+                            <p class="variation"><strong>Variation:</strong> {{ order_detail['Color'] }}, {{ order_detail['Size'] }}</p>
+                            <p class="price" style="color: black;"><strong>Price:</strong> P{{ order_detail['Price'] }}, <strong>Shipping Fee:</strong> P{{ order_detail['Shipping_Fee'] }}</p>    
+                            <p class="Total"><strong>Total:</strong> P{{ order_detail['Total_Amount'] }}</p>
+                             <div class="shipping"><strong>Shipping Address:</strong> {{ order_detail['Shipping_Address'] }}</div>
+                            <div class="cancel">
+                            <form action="{{ url_for('seller_orders.ship_now', order_id=order_detail['OrderID']) }}" method="post">
+                                <button type="submit" class="ship-now-button">SHIP NOW</button>
+                            </form>
+                            <form action="{{ url_for('seller_orders.cancel_to_ship_order', order_id=order_detail['OrderID']) }}" method="post">
+                                <button type="submit" class="cancel-order-button">CANCEL ORDER</button>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No orders yet! Place an order now!</p>
+                {% endif %}
+                    </div>
+
+            {% elif order_type == 'shipping' %}
+                {% if order_details %}
+                    {% for order_detail in order_details %}
+                    <div class="orders">
+                        <div class="order-item">
+                            <div class="order-pic">
+                                <img src="{{ url_for('static', filename='images/products/' + order_detail['ImageFileName']) }}" alt="{{ order_detail['Product_Name'] }}" width="200" height="200">
+                            </div>
+                        </div>
+                        <div class="order-details">
+                            <div>
+                                <p class="product-name">{{ order_detail['Product_Name'] }}</p>
+                                <p class="quantity"><strong>x</strong>{{ order_detail['Quantity'] }}</p>
+                                <p class="variation"><strong>Variation:</strong> {{ order_detail['Color'] }}, {{ order_detail['Size'] }}</p>
+                                <p class="price" style="color: black;"><strong>Price:</strong> P{{ order_detail['Price'] }}, <strong>Shipping Fee:</strong> P{{ order_detail['Shipping_Fee'] }}</p>    
+                                <p class="Total"><strong>Total:</strong> P{{ order_detail['Total_Amount'] }}</p>
+                                <p class ="date"> <strong>Ship Date:</strong> {{ order_detail['Shipping_Date'] }}</p>
+                                <div class="shipping"><strong>Shipping Address:</strong> {{ order_detail['Shipping_Address'] }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No orders yet! Place an order now!</p>
+                {% endif %}
+                        </div>
+
+            {% elif order_type == 'delivered'%}
+                {% if order_details %}
+                    {% for order_detail in order_details %}
+                    <div class="orders">
+                        <div class="order-item">
+                            <div class="order-pic">
+                                <img src="{{ url_for('static', filename='images/products/' + order_detail['ImageFileName']) }}" alt="{{ order_detail['Product_Name'] }}" width="200" height="200">
+                            </div>
+                        </div>
+                        <div class="order-details">
+                            <div>
+                                <p class="product-name">{{ order_detail['Product_Name'] }}</p>
+                                <p class="quantity"><strong>x</strong>{{ order_detail['Quantity'] }}</p>
+                                <p class="variation"><strong>Variation:</strong> {{ order_detail['Color'] }}, {{ order_detail['Size'] }}</p>
+                                <p class="price" style="color: black;"><strong>Price:</strong> P{{ order_detail['Price'] }}, <strong>Shipping Fee:</strong> P{{ order_detail['Shipping_Fee'] }}</p>    
+                                <p class="Total"><strong>Total:</strong> P{{ order_detail['Total_Amount'] }}</p>
+                                 <p class ="date"> <strong>Ship Date:</strong> {{ order_detail['Shipping_Date'] }}</p>
+                                 <div class="shipping"><strong>Shipping Address:</strong> {{ order_detail['Shipping_Address'] }}</div>
+                                 <div class="cancel">
+                                    <p class="order-completed"><strong>Completed</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No orders yet! Place an order now!</p>
+                {% endif %}
+
+            {% elif order_type == 'cancelled' %}
+                {% if order_details %}
+                    {% for order_detail in order_details %}
+                    <div class="orders">
+                        <div class="order-item">
+                            <div class="order-pic">
+                                <img src="{{ url_for('static', filename='images/products/' + order_detail['ImageFileName']) }}" alt="{{ order_detail['Product_Name'] }}" width="200" height="200">
+                            </div>
+                        </div>
+                        <div class="order-details">
+                            <div>
+                                <p class="product-name">{{ order_detail['Product_Name'] }}</p>
+                                <p class="quantity"><strong>x</strong>{{ order_detail['Quantity'] }}</p>
+                                <p class="variation"><strong>Variation:</strong> {{ order_detail['Color'] }}, {{ order_detail['Size'] }}</p>
+                                <p class="price" style="color: black;"><strong>Price:</strong> P{{ order_detail['Price'] }}, <strong>Shipping Fee:</strong> P{{ order_detail['Shipping_Fee'] }}</p>    
+                                <p class="Total"><strong>Total:</strong> P{{ order_detail['Total_Amount'] }}</p>
+                                 <div class="shipping"><strong>Shipping Address:</strong> {{ order_detail['Shipping_Address'] }}</div></div>
+                                 <p class="statuss"><strong>Cancelled</strong></p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No orders yet! Place an order now!</p>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        console.log('Script loaded');
+
+        (function() {
+            var refreshPageValue = "{{ refresh_page }}";
+
+            if (refreshPageValue === 'True' && !sessionStorage.hasReloaded) {
+                console.log('Reloading page...');
+                window.location.reload();
+                sessionStorage.hasReloaded = true;
+            } else {
+
+                sessionStorage.removeItem('hasReloaded');
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/css/cart.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocaLister - Cart</title>
+</head>
+<body>
+    <header>
+        <div class="Logout">
+            <form action="{{ url_for('homepage_seller.logout') }}" method="post">
+                <button class="logout-button">LOGOUT</button>
+            </form>
+        </div>
+        <div class="back">
+            <a href="{{ url_for('homepage_buyer.homepage_buyer') }}" class="button-left">BACK</a>
+        </div>
+    </header>
+    <div class="container">
+        <div class="lt-container">
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='images/cart.png') }}" alt="Cart Icon">
+            </div>
+            <div class="title-container">
+                <h1>MY CART</h1>
+            </div>
+        </div>
+        <form method="post" action="{{ url_for('cart.checkout') }}">
+            <div class="cart-item-container">
+            {% if cart_items %}
+                    {% for item in cart_items %}
+                        <div class="cart-item">
+                            <input type="checkbox" name="selected_items" value="{{ item[1] }}_{{ item[2] }}">
+                            <div class="cart-item-image-container">
+                                    <img src="{{ url_for('static', filename='images/products/' + item[4]) }}" alt="Product Image">
+                            </div>
+                            <div class="cart-item-product-details">
+                                <p class="product-name">{{ item[3] }}</p>
+                                <p class="product-color-size">{{ item[6] }}, {{ item[7] }}</p>
+                                <p class="product-amount">₱{{ item[8] }}</p>
+                                <button class="quantity-control-button" onclick="updateQuantity('{{ item[1] }}_{{ item[2] }}', 'decrement')">-</button>
+                                <input type="number" name="quantity_{{ item[1] }}_{{ item[2] }}" value="{{ item[5] }}"  class="quantity-input" readonly>
+                                <button class="quantity-control-button" onclick="updateQuantity('{{ item[1] }}_{{ item[2] }}', 'increment')">+</button>
+                            </div>
+                            <div class="cart-item-actions">
+                                <button class="remove-button" onclick="removeCartItem('{{ item[1] }}_{{ item[2] }}')">REMOVE</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                        <button type="submit" class="checkout-button">CHECKOUT</button>
+            {% else %}
+            <p>Your cart is empty.</p>
+            {% endif %}
+            </div>
+        </form>
+    </div>
+    <script>
+        function updateQuantity(itemId, action) {
+    const quantityInput = document.querySelector(`input[name="quantity_${itemId}"]`);
+    let currentQuantity = parseInt(quantityInput.value);
+
+    if (action === 'increment') {
+        currentQuantity++;
+    } else if (action === 'decrement' && currentQuantity > 1) {
+        currentQuantity--;
+    }
+
+    event.preventDefault();
+
+    fetch('/update_quantity', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            item_id: itemId,
+            new_quantity: currentQuantity,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+
+    quantityInput.value = currentQuantity;
+}
+
+function removeCartItem(itemId) {
+    event.preventDefault();
+
+    if (confirm("Are you sure you want to remove this item from the cart?")) {
+        fetch('/remove_item', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                item_id: itemId,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+
+            if (data.success) {
+                const cartItem = document.querySelector(`.cart-item input[value="${itemId}"]`).closest('.cart-item');
+                cartItem.remove();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+}
+    </script>
+</body>
+</html>

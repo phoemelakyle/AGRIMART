@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/css/seller_registration.css">
+    <title>Sign up</title>
+</head>
+<body>
+    <header></header>
+    <div class="content">
+        <div class="logo">
+        </div>
+    </div>
+    <div class="container">
+        <div class="labelbox">
+            <h1>SIGN UP</h1>
+            <h2>Hi Seller!</h2>
+            <div class="sbbox">
+                <form method="post" action="/register/seller">
+                <div class="row">
+                    <div class="col1">
+                        <label>Name:</label>
+                    </div>
+                    <div class="col2">
+                        <input type="text" name="Name" id="Name" required><br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col1">
+                        <label>Email:</label>
+                    </div>
+                    <div class="col2">
+                        <input type="email" name="Email" id="Email" required><br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col1">
+                        <label>Address:</label>
+                    </div>
+                    <div class="col2">
+                        <input type="text" name="Address" id="Address" required><br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col1">
+                        <label>Phone Number:</label>
+                    </div>
+                    <div class="col2">
+                        <input type="text" name="Phone_Number" id="Phone_Number" required><br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col1">
+                        <label>Username:</label>
+                    </div>
+                    <div class="col2">
+                        <input type="text" name="Username" id="Username" required><br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col1">
+                        <label>Password:</label>
+                    </div>
+                    <div class="col2">
+                        <input type="password" name="Password" id="Password" required><br>
+                    </div>
+                </div>
+                <input type="submit" name="submit_button" value="Sign up">
+                </form>
+                {% if error %}
+                <div class="error_message">{{ error }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

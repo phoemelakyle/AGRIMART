@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocaLister - Product Details</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/viewproduct.css') }}">
+    <script src="{{ url_for('static', filename='viewproduct.js') }}"></script>
+</head>
+
+<body>
+    <div class="banner">
+        <img src="{{ url_for('static', filename='images/header.png') }}" alt="LocaLister Banner Image">
+        <div class="buttons">
+            <form action="{{ url_for('homepage_buyer.homepage_buyer') }}" method="post">
+                <button class="button-left">BACK</button>
+            </form>
+            <a href="{{ url_for('cart.cart') }}" class="button-right">
+                <img src="{{ url_for('static', filename='images/cart.png') }}" alt="Cart Icon">
+            </a>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="side">
+         <h2>FILTERS</h2>
+         <div class="column column-left">
+             <form action="{{ url_for('homepage_buyer.filter_products', category_name='all') }}"  method="get">
+           <button type="submit" class="filter-button" name="selected_category" value="all">All Products</button>
+             </form>
+         {% for category in categories %}
+             <form action="{{ url_for('homepage_buyer.filter_products', category_name=category.Category_Name) }}" method="get">
+                 <button type="submit" class="filter-button" name="selected_category" value="{{ category.CategoryID }}">{{ category.Category_Name }}</button>
+             </form>
+         {% endfor %}
+         </div>
+         <div class="status">
+             <h3>STATUS</h3>
+             <form action="{{ url_for('homepage_buyer.to_pay_orders') }}" method="get">
+                 <button type="submit" class="stat-button" name="selected_status" value="TO_PAY">TO PAY</button>
+             </form>
+             <form action="{{ url_for('homepage_buyer.to_ship_orders') }}" method="get">
+                 <button type="submit" class="stat-button" name="selected_status" value="TO_SHIP">TO SHIP</button>
+             </form>
+             <form action="{{ url_for('homepage_buyer.shipping_orders') }}" method="get">
+                 <button type="submit" class="stat-button" name="selected_status" value="SHIPPING">SHIPPING</button>
+             </form>
+             <form action="{{ url_for('homepage_buyer.delivered_orders') }}" method="get">
+                 <button type="submit" class="stat-button" name="selected_status" value="DELIVERED">DELIVERED</button>
+             </form>
+             <form action="{{ url_for('homepage_buyer.cancelled_orders') }}" method="get">
+                 <button type="submit" class="stat-button" name="selected_status" value="CANCELLED">CANCELLED</button>
+             </form>
+        </div>
+         </div>
+ </div>
+ 
+        <div class="column column-right">
+            {% for product in product_data %}
+            <div class="product-container" data-product-id="{{ product['ProductID'] }}">
+                 <h3 class="name">{{ category_name.Category_Name }} / {{ product['Product_Name'] }}</h3>
+                <div class="image-container">
+                    <img class="product-img" src="{{ url_for('static', filename='images/products/' + product['ImageFileName']) }}" alt="Product Image" width="200" height="200">
+                </div>
+           
+                <div id="product-var">            
+                    <div id="quan-disp">
+                    </div>
+                    <div id="plusminuscart">
+                    </div>
+                </div>
+           
+                <div>
+                    <button class="btn-addtocart" data-product-id="{{ product['ProductID'] }}">ADD TO CART</button>
+                </div>
+            </div>                     
+                            <div class="viewproduct-container">
+                                <p class="product-name">{{ product['Product_Name'] }}</p>    
+                                <p class="variation">Colors:</p>
+                                {% for color in product['Colors'] %}
+                                    <button class="color-button" data-color="{{ color }}">{{ color }}</button>
+                                {% endfor %}
+                           
+                                <p class="variation">Sizes:</p>
+                                {% for size in product['Sizes'] %}
+                                    <button class="size-button" data-size="{{ size }}">{{ size }}</button>
+                                {% endfor %}
+                           
+                                <p class="variation">Prices:</p>
+                                {% for price in product['Prices'] %}
+                                    <button class="price-button unclickable" data-price="{{ price }}">{{ price }}</button>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

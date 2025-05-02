@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocaLister - Homepage</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/homepage_buyer.css') }}">
+</head>
+<body>
+    <div class="banner">
+        <img src="{{ url_for('static', filename='images/header.png') }}" alt="LocaLister Banner Image">
+        <div class="buttons">
+            <form action="{{ url_for('homepage_buyer.logout') }}" method="post">
+                <button class="button-left">LOGOUT</button>
+            </form>
+            <a href="{{ url_for('cart.cart') }}" class="button-right">
+                <img src="{{ url_for('static', filename='images/cart.png') }}" alt="Cart Icon">
+            </a>
+        </div>
+    </div>
+    <div class="content">
+       <div class="side">
+        <h2>FILTERS</h2>
+        <div class="column column-left">
+            <form action="{{ url_for('homepage_buyer.filter_products', category_name='all') }}"  method="get">
+          <button type="submit" class="filter-button" name="selected_category" value="all">All Products</button>
+            </form>
+        {% for category in categories %}
+            <form action="{{ url_for('homepage_buyer.filter_products', category_name=category.Category_Name) }}" method="get">
+                <button type="submit" class="filter-button" name="selected_category" value="{{ category.CategoryID }}">{{ category.Category_Name }}</button>
+            </form>
+        {% endfor %}
+        </div>
+        <div class="status">
+            <h3>STATUS</h3>
+            <form action="{{ url_for('homepage_buyer.to_pay_orders') }}" method="get">
+                <button type="submit" class="stat-button" name="selected_status" value="TO_PAY">TO PAY</button>
+            </form>
+            <form action="{{ url_for('homepage_buyer.to_ship_orders') }}" method="get">
+                <button type="submit" class="stat-button" name="selected_status" value="TO_SHIP">TO SHIP</button>
+            </form>
+            <form action="{{ url_for('homepage_buyer.shipping_orders') }}" method="get">
+                <button type="submit" class="stat-button" name="selected_status" value="SHIPPING">SHIPPING</button>
+            </form>
+            <form action="{{ url_for('homepage_buyer.delivered_orders') }}" method="get">
+                <button type="submit" class="stat-button" name="selected_status" value="DELIVERED">DELIVERED</button>
+            </form>
+            <form action="{{ url_for('homepage_buyer.cancelled_orders') }}" method="get">
+                <button type="submit" class="stat-button" name="selected_status" value="CANCELLED">CANCELLED</button>
+            </form>
+       </div>
+        </div>
+</div>
+        <div class="column column-right">
+            <h4>PRODUCTS</h4>
+            <div class="product-container">
+                {% for product in product_data %}
+                    <div class="product-box">
+                        <div class="image-container">
+                        <a href="{{ url_for('viewproduct.viewproduct', product_id=product['ProductID']) }}">
+                            <img src="{{ url_for('static', filename='images/products/' + product['ImageFileName']) }}"  alt="Product Image" width="200" height="200">
+                        </a>
+                        </div>
+                        <p>{{ product['Product_Name'] }}</p>
+                        {% if product['MinPrice'] == product['MaxPrice'] %}
+                            <p>P{{ product['MinPrice'] }}</p>
+                        {% else %}
+                            <p>P{{ product['MinPrice'] }} - P{{ product['MaxPrice'] }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

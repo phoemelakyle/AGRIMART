@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/css/edit_payment_options.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Payment Options</title>
+</head>
+<body>
+    <header>
+        <div class="Logout">
+            <form action="{{ url_for('add_product.logout') }}" method="post">
+                <button class="logout-button">LOGOUT</button>
+            </form>
+        </div>
+    </header>
+
+    <div class="left-container">
+        <button onclick="window.location.href='/homepage_seller'" style="color: white; font-size: 16px;">HOMEPAGE</button>
+        {% set url = url_for('seller_orders.unpaid_orders') %}
+        <button onclick="window.location.href='{{ url }}'" style="color: white; font-size: 16px;">ORDERS</button>
+        <button onclick="window.location.href='/add_product'" style="color: white; font-size: 16px;">ADD PRODUCT</button>
+        <button onclick="window.location.href='/payment_options'" style="color: burlywood; font-size: 16px;">PAYMENT OPTIONS</button>
+    </div>
+
+    <div class="container">
+        <h1>EXISTING PAYMENT OPTIONS</h1>
+        <form method="POST" action="{{ url_for('payment_options.edit_payment_options') }}">
+            <div class="payment-options">
+            {% for option in existing_payment_options %}
+                <div class="payment-option">
+                    <p><strong>{{ option[2] }}</strong></p>
+                    {% if option[2] != 'Cash on Delivery' %}
+                    <p> Account Number: {{ option[3] }} </p>
+                    {% else %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+            </div>
+            <button type="submit" name="edit_options" value="1">EDIT PAYMENT OPTIONS</button>
+        </form>
+    </div>
+</body>
+</html>

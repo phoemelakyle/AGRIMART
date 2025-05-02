@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/css/select_role.css">
+    <title>Select Your Role</title>
+</head>
+<body>
+    <header></header>
+    <div class="content">
+        <div class="logo"></div>
+    </div>
+    <div class="container">
+        <form method="POST" action="/select_role">
+            <div class="labelbox">
+                <h1>SIGN UP</h1>
+                <div class="sbbox">
+                    <div class="buyer-box">
+                        <img class="account" src="../static/images/account.png" alt="Account Logo">
+                        <h2>I AM A BUYER</h2>
+                        <button type="submit" name="userType" value="buyer" class="button">Register now</button>
+                    </div>
+                    <div class="seller-box">
+                        <img class="account" src="../static/images/account.png" alt="Account Logo">
+                        <h2>I AM A SELLER</h2>
+                        <button type="submit" name="userType" value="seller" class="button">Register now</button>
+                    </div>
+                </div>
+            </div> 
+        </form>
+    </div>
+</body>
+</html>

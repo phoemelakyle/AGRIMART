@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/css/checkout.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocaLister - Checkout</title>
+</head>
+<body>
+    <header>
+        <div class="Logout">
+            <form action="{{ url_for('homepage_seller.logout') }}" method="post">
+                <button class="logout-button">LOGOUT</button>
+            </form>
+        </div>
+        <div class="back">
+            <a href="{{ url_for('cart.cart') }}" class="button-left">BACK</a>
+        </div>
+    </header>
+    <div class="container">
+        <div class="title-container">
+            <h1>CHECKOUT</h1>
+        </div>
+        <form action="{{ url_for('cart.process_checkout') }}" method="post" enctype="multipart/form-data">
+        <div class="checkout-item-container">
+            {% if selected_items_details %}
+            <div class="selected-item-container">
+                    {% for item in selected_items_details %}
+                    <input type="hidden" name="selected_items" value="{{ item }}">
+                    <input type="hidden" name="product_total[]" value="{{ (item[6] * item[8]) + (item[5] * item[6]) + 20 }}">
+                    <input type="hidden" name="payment_option_id" id="payment_option_id" value="">
+                        <div class="selected-item">
+                            <div class="selected-item-image-container">
+                                <img src="{{ url_for('static', filename='images/products/' + item[7]) }}" alt="Product Image"  width="200" height="200">
+                            </div>
+                            <div class="selected-item-details">
+                                <p class="product-name">{{ item[2] }}</p>
+                                <p class="product-color-size">{{ item[3] }}, {{ item[4] }}</p>
+                                <p class="product-amount">₱{{ item[5] }} x {{item[6]}}</p>
+                                <br>
+                                <br>
+                                <br>
+                                {% set product_total = (item[6] * item[8]) + (item[5] * item[6]) + 20 %}
+                                {% set shipping_fee = item[6] * item[8] %}
+                                <p class="product-shipping_fee">Shipping Fee: {{shipping_fee}}</p>
+                                <p class="product-total total-amount">Product Total: ₱{{ product_total }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+            </div>
+            <div class="line-container">
+                <hr class="custom-line">
+            </div>
+            <div class="second-container">
+                <h2>Payment Options</h2>
+                <div class="payment-options-container">
+                    {% for variation_id, options in payment_options.items() %}
+                        <div class="payment-option">
+                            <h3><strong>Product Name:
+                                {% for product_name in options['product_names'] %}
+                                    {{ product_name }}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </strong></h3>
+           
+                            {% set first_option = options['options'][0] %}
+           
+                            <p><strong>Color: {{ first_option['color'] }}, Size: {{ first_option['size'] }}</strong></p>
+                            <br>
+           
+                            {% for option in options['options'] %}
+                                <label class="payment-label">
+                                    <input type="radio" name="payment_option_{{ variation_id }}" value="{{ option['payment_optionsid'] }}" onchange="handlePaymentOptionSelection('{{ variation_id }}')">
+                                    {% if option['payment_method'] == 'Cash on Delivery' %}
+                                        <span class="payment-method">{{ option['payment_method'] }}</span>
+                                    {% elif option['payment_method'] != 'Cash on Delivery' %}
+                                        <span class="payment-method">{{ option['payment_method'] }},</span>
+                                        <span class="account-number">Account Number: {{ option['account_number'] }}</span>
+                                    {% endif %}
+                                </label>
+                                <br>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>            
+            <div class="line-container">
+                <hr class="custom-line">
+            </div>
+            <div class="buyer-details">
+                <div class="row">
+                    <div class="col1">
+                        <label for="shipping-address">Shipping Address:</label>
+                    </div>
+                    <div class="col2">
+                        <input type="text" id="shipping-address" name="shipping_address" required>
+                    </div>
+                </div>
+            </div>
+            <div class="total-payment-container">
+                <h2>Total Payment: ₱{{ total_payment }}</h2>
+            </div>
+            {% elif message %}
+                <p>{{ message }}</p>
+            {% endif %}
+            <button class="place-order-button" type="submit">Place Order</button>
+        </div>
+        </form>
+    </div>
+    <script>
+        var selectedPaymentOptions = {};
+   
+        function handlePaymentOptionSelection(variationId) {
+            var selectedOption = document.querySelector('input[name="payment_option_' + variationId + '"]:checked');
+            var paymentOptionsId = selectedOption ? selectedOption.value : '';
+           
+            selectedPaymentOptions[variationId] = paymentOptionsId;
+   
+            document.getElementById('payment_option_id').value = JSON.stringify(selectedPaymentOptions);
+        }
+    </script>    
+</body>
+</html>

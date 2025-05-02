@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocaLister - Homepage</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/buyer_order.css') }}">
+</head>
+<body>
+    <div class="banner">
+        <img src="{{ url_for('static', filename='images/header.png') }}" alt="LocaLister Banner Image">
+        <div class="buttons">
+            <form action="{{ url_for('homepage_buyer.logout') }}" method="post">
+                <button class="button-left">LOGOUT</button>
+            </form>
+            <a href="{{ url_for('cart.cart') }}" class="button-right">
+                <img src="{{ url_for('static', filename='images/cart.png') }}" alt="Cart Icon">
+            </a>
+        </div>
+    </div>
+
+
+    <div class="content">
+       <div class="side">
+        <h2>FILTERS</h2>
+        <div class="column column-left">
+            <form action="{{ url_for('homepage_buyer.filter_products', category_name='all') }}"  method="get">
+          <button type="submit" class="filter-button" name="selected_category" value="all">All Products</button>
+            </form>
+        {% for category in categories %}
+            <form action="{{ url_for('homepage_buyer.filter_products', category_name=category.Category_Name) }}" method="get">
+                <button type="submit" class="filter-button" name="selected_category" value="{{ category.CategoryID }}">{{ category.Category_Name }}</button>
+            </form>
+        {% endfor %}
+        </div>
+        <div class="status">
+            <h3>STATUS</h3>
+            <form action="{{ url_for('homepage_buyer.to_pay_orders') }}" method="get">
+                <button type="submit" class="stat-button" name="selected_status" value="TO_PAY">TO PAY</button>
+            </form>
+            <form action="{{ url_for('homepage_buyer.to_ship_orders') }}" method="get">
+                <button type="submit" class="stat-button" name="selected_status" value="TO_SHIP">TO SHIP</button>
+            </form>
+            <form action="{{ url_for('homepage_buyer.shipping_orders') }}" method="get">
+                <button type="submit" class="stat-button" name="selected_status" value="SHIPPING">SHIPPING</button>
+            </form>
+            <form action="{{ url_for('homepage_buyer.delivered_orders') }}" method="get">
+                <button type="submit" class="stat-button" name="selected_status" value="DELIVERED">DELIVERED</button>
+            </form>
+            <form action="{{ url_for('homepage_buyer.cancelled_orders') }}" method="get">
+                <button type="submit" class="stat-button" name="selected_status" value="CANCELLED">CANCELLED</button>
+            </form>
+       </div>
+        </div>
+</div>
+
+<div class="column column-right">
+    <div class="order-detail">
+        <div class="content">
+            <h1>
+                {% if order_type == 'to_pay' %}
+                    TO PAY
+                {% elif order_type == 'to_ship' %}
+                    TO SHIP
+                <div class="note"> Note: Once your order is in the shipping process, cancellation is not possible. </div>
+                {% elif order_type == 'shipping' %}
+                    SHIPPING
+                {% elif order_type == 'cancelled' %}
+                    CANCELLED
+                {% elif order_type == 'delivered' %}
+                    DELIVERED
+                {% endif %}
+                :
+            </h1>
+        </div>
+</div>
+
+
+            {% if order_type == 'to_pay' %}
+            {% if order_details %}
+            {% for order_detail in order_details %}
+             <div class="orders">
+            <div class="order-item">
+                <div class="order-pic">
+                    <img src="{{ url_for('static', filename='images/products/' + order_detail['ImageFileName']) }}" alt="{{ order_detail['Product_Name'] }}" width="200" height="200">
+                </div>
+            </div>
+            <div class="order-details">
+                
+                    <p class="product-name">{{ order_detail['Product_Name'] }}</p>
+                    <p class="quantity"><strong>x</strong>{{ order_detail['Quantity'] }}</p>
+                    <p class="variation"><strong>Variation:</strong> {{ order_detail['Color'] }}, {{ order_detail['Size'] }}</p>
+                    <p class="price" style="color: black;"><strong>Price:</strong> P{{ order_detail['Price'] }}, <strong>Shipping Fee:</strong> P{{ order_detail['Shipping_Fee'] }}</p>    
+                    <p class="Total"><strong>Total:</strong> P{{ order_detail['Total_Amount'] }}</p>
+                     <div class="shipping"><strong>Shipping Address:</strong> {{ order_detail['Shipping_Address'] }}</div>   
+                     <form action="{{ url_for('homepage_buyer.pay_now', order_id=order_detail['OrderID']) }}" method="post">
+                        <button type="submit" class="pay-now-button">PAY NOW</button>
+                    </form>
+                    <div class="cancel">
+            </form>
+            <form action="{{ url_for('homepage_buyer.cancel_to_pay', order_id=order_detail['OrderID']) }}" method="post">
+                <button type="submit" class="cancel-order-button">CANCEL ORDER</button>
+            </form>
+        </div>
+            </div>
+             </div>
+        {% endfor %}
+        {% else %}
+        <p>No orders yet! Place an order now!</p>
+        {% endif %}
+
+
+<div>
+        
+        {% elif order_type == 'to_ship' %}
+        {% if order_details %}
+        {% for order_detail in order_details %}
+        <div class="orders">
+        <div class="order-item">
+            <div class="order-pic">
+                <img src="{{ url_for('static', filename='images/products/' + order_detail['ImageFileName']) }}" alt="{{ order_detail['Product_Name'] }}" width="200" height="200">
+            </div>
+        </div>
+        <div class="order-details">
+                            
+            <p class="product-name">{{ order_detail['Product_Name'] }}</p>
+            <p class="quantity"><strong>x</strong>{{ order_detail['Quantity'] }}</p>
+            <p class="variation"><strong>Variation:</strong> {{ order_detail['Color'] }}, {{ order_detail['Size'] }}</p>
+            <p class="price" style="color: black;"><strong>Price:</strong> P{{ order_detail['Price'] }}, <strong>Shipping Fee:</strong> P{{ order_detail['Shipping_Fee'] }}</p>    
+            <p class="Total"><strong>Total:</strong> P{{ order_detail['Total_Amount'] }}</p>
+             <div class="shipping"><strong>Shipping Address:</strong> {{ order_detail['Shipping_Address'] }}</div>
+            <p class="statuss"><strong>to ship<strong></p>
+                <div class="cancel">
+            <form action="{{ url_for('homepage_buyer.cancel_to_ship', order_id=order_detail['OrderID']) }}" method="post">
+                <button type="submit" class="cancel-order-button">CANCEL ORDER</button>
+            </form>  
+        </div>
+</div>
+</div>
+        {% endfor %}
+        {% else %}
+        <p>No orders yet! Place an order now!</p>
+        {% endif %}
+
+        
+<div>
+
+        {% elif order_type == 'shipping' %}
+        {% if order_details %}
+        {% for order_detail in order_details %}
+        <div class="orders">
+        <div class="order-item">
+            <div class="order-pic">
+                <img src="{{ url_for('static', filename='images/products/' + order_detail['ImageFileName']) }}" alt="{{ order_detail['Product_Name'] }}" width="200" height="200">
+            </div>
+        </div>
+
+        <div class="order-details">
+                            
+            <p class="product-name">{{ order_detail['Product_Name'] }}</p>
+            <p class="quantity"><strong>x</strong>{{ order_detail['Quantity'] }}</p>
+            <p class="variation"><strong>Variation:</strong> {{ order_detail['Color'] }}, {{ order_detail['Size'] }}</p>
+            <p class="price" style="color: black;"><strong>Price:</strong> P{{ order_detail['Price'] }}, <strong>Shipping Fee:</strong> P{{ order_detail['Shipping_Fee'] }}</p>    
+            <p class="Total"><strong>Total:</strong> P{{ order_detail['Total_Amount'] }}</p>
+             <div class="shipping"><strong>Shipping Address:</strong> {{ order_detail['Shipping_Address'] }}</div>
+            <p class="statuss"><strong>Ship Date:</strong>{{ order_detail['Shipping_Date'] }}</p>
+            <div class="cancel">
+            <form action="{{ url_for('homepage_buyer.order_received', order_id=order_detail['OrderID']) }}" method="post">
+                <button type="submit" class="ship-now-button">ORDER RECEIVED</button>
+            </form>
+        </div>
+        </div>
+</div>
+        {% endfor %}
+        {% else %}
+        <p>No orders yet! Place an order now!</p>
+        {% endif %}
+
+
+
+        <div>
+        {% elif order_type == 'delivered' %}
+        {% if order_details %}
+        {% for order_detail in order_details %}
+        <div class="orders">
+        <div class="order-item">
+            <div class="order-pic">
+                <img src="{{ url_for('static', filename='images/products/' + order_detail['ImageFileName']) }}" alt="{{ order_detail['Product_Name'] }}" width="200" height="200">
+            </div>
+        </div>
+        <div class="order-details">
+                            
+            <p class="product-name">{{ order_detail['Product_Name'] }}</p>
+            <p class="quantity"><strong>x</strong>{{ order_detail['Quantity'] }}</p>
+            <p class="variation"><strong>Variation:</strong> {{ order_detail['Color'] }}, {{ order_detail['Size'] }}</p>
+            <p class="price" style="color: black;"><strong>Price:</strong> P{{ order_detail['Price'] }}, <strong>Shipping Fee:</strong> P{{ order_detail['Shipping_Fee'] }}</p>    
+            <p class="Total"><strong>Total:</strong> P{{ order_detail['Total_Amount'] }}</p>
+             <div class="shipping"><strong>Shipping Address:</strong> {{ order_detail['Shipping_Address'] }}</div>
+            <p class="statuss"><strong>Ship Date:</strong>{{ order_detail['Shipping_Date'] }}</p>
+            <div class="cancel">
+                <p class="order-completed">Order completed.</p>
+        </div>
+        </div>
+</div>
+        {% endfor %}
+        {% else %}
+        <p>No orders yet! Place an order now!</p>
+        {% endif %}
+
+
+
+        <div>
+        {% elif order_type == 'cancelled' %}
+        {% if order_details %}
+        {% for order_detail in order_details %}
+        <div class="orders">
+        <div class="order-item">
+            <div class="order-pic">
+                <img src="{{ url_for('static', filename='images/products/' + order_detail['ImageFileName']) }}" alt="{{ order_detail['Product_Name'] }}" width="200" height="200">
+            </div>
+        </div>
+
+        <div class="order-details">
+            <div>        
+            <p class="product-name">{{ order_detail['Product_Name'] }}</p>
+            <p class="quantity"><strong>x</strong>{{ order_detail['Quantity'] }}</p>
+            <p class="variation"><strong>Variation:</strong> {{ order_detail['Color'] }}, {{ order_detail['Size'] }}</p>
+            <p class="price" style="color: black;"><strong>Price:</strong> P{{ order_detail['Price'] }}, <strong>Shipping Fee:</strong> P{{ order_detail['Shipping_Fee'] }}</p>    
+            <p class="Total"><strong>Total:</strong> P{{ order_detail['Total_Amount'] }}</p>
+             <div class="shipping"><strong>Shipping Address:</strong> {{ order_detail['Shipping_Address'] }}</div>
+             <p class="statuss"><strong>Order cancelled.</strong></p>
+        </div>
+        </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>No orders yet! Place an order now!</p>
+        {% endif %}
+</div>
+        {% endif %}
+    </div>
+</div>
+</div>
+
+<script>
+console.log('Script loaded');
+
+(function() {
+    var refreshPageValue = "{{ refresh_page }}";
+
+    if (refreshPageValue === 'True' && !sessionStorage.hasReloaded) {
+        console.log('Reloading page...');
+        window.location.reload();
+        sessionStorage.hasReloaded = true;
+    } else {
+
+        sessionStorage.removeItem('hasReloaded');
+    }
+})();
+</script>
+</body>
+</html>
