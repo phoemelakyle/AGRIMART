@@ -1,76 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agrimart - Homepage</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/homepage_buyer.css') }}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Agrimart - Homepage</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage_buyer.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <div class="banner">
-        <img src="{{ url_for('static', filename='images/header.png') }}" alt="LocaLister Banner Image">
-        <div class="buttons">
-            <form action="{{ url_for('homepage_buyer.logout') }}" method="post">
-                <button class="button-left">LOGOUT</button>
-            </form>
-            <a href="{{ url_for('cart.cart') }}" class="button-right">
-                <img src="{{ url_for('static', filename='images/cart.png') }}" alt="Cart Icon">
-            </a>
-        </div>
+
+  <!-- Header -->
+  <header class="top-bar">
+    <div class="logo">
+        <img src="static/images/logo.png" alt="Agrimart Logo" class="logo-icon">
+        Agrimart
+    </div>          
+    <div class="tagline">Connecting you to Local Farmers</div>
+  </header>
+
+  <!-- Navigation Menu -->
+  <nav class="nav-menu">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Contact Us</a></li>
+    </ul>
+  </nav>
+  
+  <!-- Breadcrumb Navigation -->
+<nav class="main-nav">
+  <ul class="breadcrumb">
+    <li><a href="/index"><i class="fas fa-home"></i></a></li>
+    <li>›</li>
+    <li>
+      <a href="/homepage_buyer" class="button">All Products</a>
+    </li>
+    
+      
+  </ul>
+  
+  <div class="icons">
+    <span class="cart">
+      <a href="{{ url_for('cart.cart') }}" class="cart-link">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="badge">2</span>
+      </a>
+    </span>
+    
+    <div class="user-dropdown" id="userDropdown">
+      <span class="user" id="userIcon"><i class="fas fa-user"></i></span>
+      <div class="user-menu" id="userMenu">
+        <a href="#">Profile</a>
+        <a href="#">Settings</a>
+        <form action="{{ url_for('homepage_buyer.logout') }}" method="post">
+          <button class="logout-btn" type="submit">Logout</button>
+        </form>
+      </div>
     </div>
-    <div class="content">
-       <div class="side">
-        <h2>FILTERS</h2>
-        <div class="column column-left">
-            <form action="{{ url_for('homepage_buyer.filter_products', category_name='all') }}"  method="get">
-          <button type="submit" class="filter-button" name="selected_category" value="all">All Products</button>
-            </form>
+  </div>
+</nav>
+
+
+ <!-- Main Container -->
+<div class="container">
+  <aside class="sidebar">
+    <!-- Redesigned CATEGORY Section -->
+    <div class="category-filter">
+      <h3>CATEGORIES</h3>
+      <ul class="category-list">
+        <li>
+          <form action="{{ url_for('homepage_buyer.filter_products', category_name='all') }}" method="get">
+            <button type="submit" class="category-item {% if selected_category == 'all' %}active{% endif %}">
+              All Products
+            </button>
+          </form>
+          
+        </li>
         {% for category in categories %}
-            <form action="{{ url_for('homepage_buyer.filter_products', category_name=category.Category_Name) }}" method="get">
-                <button type="submit" class="filter-button" name="selected_category" value="{{ category.CategoryID }}">{{ category.Category_Name }}</button>
-            </form>
+        <li>
+          <form action="{{ url_for('homepage_buyer.filter_products', category_name=category.Category_Name) }}" method="get">
+            <button type="submit" class="category-item {% if selected_category == category.CategoryID %}active{% endif %}">
+              {{ category.Category_Name }}
+            </button>
+          </form>
+        </li>
         {% endfor %}
-        </div>
-        <div class="status">
-            <h3>STATUS</h3>
-            <form action="{{ url_for('homepage_buyer.to_pay_orders') }}" method="get">
-                <button type="submit" class="stat-button" name="selected_status" value="TO_PAY">TO PAY</button>
-            </form>
-            <form action="{{ url_for('homepage_buyer.to_ship_orders') }}" method="get">
-                <button type="submit" class="stat-button" name="selected_status" value="TO_SHIP">TO SHIP</button>
-            </form>
-            <form action="{{ url_for('homepage_buyer.shipping_orders') }}" method="get">
-                <button type="submit" class="stat-button" name="selected_status" value="SHIPPING">SHIPPING</button>
-            </form>
-            <form action="{{ url_for('homepage_buyer.delivered_orders') }}" method="get">
-                <button type="submit" class="stat-button" name="selected_status" value="DELIVERED">DELIVERED</button>
-            </form>
-            <form action="{{ url_for('homepage_buyer.cancelled_orders') }}" method="get">
-                <button type="submit" class="stat-button" name="selected_status" value="CANCELLED">CANCELLED</button>
-            </form>
-       </div>
-        </div>
-</div>
-        <div class="column column-right">
-            <h4>PRODUCTS</h4>
-            <div class="product-container">
-                {% for product in product_data %}
-                    <div class="product-box">
-                        <div class="image-container">
-                        <a href="{{ url_for('viewproduct.viewproduct', product_id=product['ProductID']) }}">
-                            <img src="{{ url_for('static', filename='images/products/' + product['ImageFileName']) }}"  alt="Product Image" width="200" height="200">
-                        </a>
-                        </div>
-                        <p>{{ product['Product_Name'] }}</p>
-                        {% if product['MinPrice'] == product['MaxPrice'] %}
-                            <p>P{{ product['MinPrice'] }}</p>
-                        {% else %}
-                            <p>P{{ product['MinPrice'] }} - P{{ product['MaxPrice'] }}</p>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
+      </ul>
     </div>
+
+  
+
+      <!-- Redesigned STATUS Section -->
+      <div class="status">
+        <h3>STATUS</h3>
+        <ul class="status-list">
+          <li>
+            <form action="{{ url_for('homepage_buyer.to_pay_orders') }}" method="get">
+              <button type="submit" class="status-item">
+                <i class="fas fa-wallet"></i> To Pay
+              </button>
+            </form>
+          </li>
+          <li>
+            <form action="{{ url_for('homepage_buyer.to_ship_orders') }}" method="get">
+              <button type="submit" class="status-item">
+                <i class="fas fa-box"></i> To Ship
+              </button>
+            </form>
+          </li>
+          <li>
+            <form action="{{ url_for('homepage_buyer.shipping_orders') }}" method="get">
+              <button type="submit" class="status-item">
+                <i class="fas fa-truck"></i> Shipping
+              </button>
+            </form>
+          </li>
+          <li>
+            <form action="{{ url_for('homepage_buyer.delivered_orders') }}" method="get">
+              <button type="submit" class="status-item">
+                <i class="fas fa-check-circle"></i> Delivered
+              </button>
+            </form>
+          </li>
+          <li>
+            <form action="{{ url_for('homepage_buyer.cancelled_orders') }}" method="get">
+              <button type="submit" class="status-item">
+                <i class="fas fa-times-circle"></i> Cancelled
+              </button>
+            </form>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Product Column -->
+<div class="column-right">
+  <h4>Welcome to Agrimart!</h4>
+  <div class="product-container">
+    {% for product in product_data %}
+    <div class="product-box">
+      <div class="image-container">
+        <a href="{{ url_for('viewproduct.viewproduct', product_id=product['ProductID']) }}">
+          <img src="{{ url_for('static', filename='images/products/' + product['ImageFileName']) }}" alt="Product Image">
+        </a>
+      </div>
+      <div class="product-details">
+        <p class="product-name">{{ product['Product_Name'] }}</p>
+        {% if product['MinPrice'] == product['MaxPrice'] %}
+          <p class="product-price">₱{{ product['MinPrice'] }}</p>
+        {% else %}
+          <p class="product-price">₱{{ product['MinPrice'] }} - ₱{{ product['MaxPrice'] }}</p>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+</div>
+ <!-- Newsletter -->
+ <section class="newsletter">
+  <div class="newsletter-content">
+    <div class="newsletter-text">
+      <h3><i class="fas fa-envelope"></i> Subscribe to our Newsletter</h3>
+      <p>Stay connected with the latest updates and local farm offers.</p>
+    </div>
+    <form class="newsletter-form">
+      <input type="email" placeholder="Your email address" required />
+      <button type="submit">Subscribe</button>
+    </form>
+    <div class="social-icons">
+      <a href="#"><i class="fab fa-facebook-f"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="main-footer">
+  <div class="footer-content">
+    <div class="footer-about">
+      <img src="static/images/logo.png" alt="Agrimart Logo" class="logo-icon">
+      Agrimart
+  
+      <p>Empowering farmers and connecting communities through sustainable commerce.</p>
+      <p><strong>09271674524</strong><br />agrimart@.com</p>
+    </div>
+    <div class="footer-columns">
+      <div>
+        <h5>My Account</h5>
+        <ul>
+          <li>My Account</li>
+          <li>Order History</li>
+          <li>Shopping Cart</li>
+          <li>Wishlist</li>
+        </ul>
+      </div>
+      <div>
+        <h5>Help</h5>
+        <ul>
+          <li>Contact</li>
+          <li>FAQs</li>
+          <li>Terms & Conditions</li>
+          <li>Privacy Policy</li>
+        </ul>
+      </div>
+      <div>
+        <h5>Proxy</h5>
+        <ul>
+          <li>About</li>
+          <li>Shop</li>
+          <li>Product</li>
+          <li>Track Order</li>
+        </ul>
+      </div>
+      <div>
+        <h5>Categories</h5>
+        <ul>
+          <li>Order History</li>
+          <li>Shopping Cart</li>
+          <li>Wishlist</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  <!-- JavaScript -->
+  <script>
+    document.querySelectorAll('.category-option input[type="radio"]').forEach(radio => {
+      radio.addEventListener('change', function () {
+        this.closest('form').submit();
+      });
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const userIcon = document.getElementById('userIcon');
+      const userMenu = document.getElementById('userMenu');
+  
+      userIcon.addEventListener('click', function (event) {
+        userMenu.classList.toggle('show');
+        event.stopPropagation(); // Prevents event from bubbling up
+      });
+  
+      // Close the dropdown if clicked outside
+      document.addEventListener('click', function (event) {
+        if (!userMenu.contains(event.target)) {
+          userMenu.classList.remove('show');
+        }
+      });
+    });
+  </script>
+
+  
 </body>
 </html>

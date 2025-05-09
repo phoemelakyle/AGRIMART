@@ -13,10 +13,13 @@ import os
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
+
 home_directory = os.path.expanduser("~")
 relative_path = 'Desktop/AGRIMART/static/images/products'
 upload_folder = os.path.join(home_directory, relative_path)
 app.config['UPLOAD_FOLDER'] = upload_folder
+
+# Register blueprints
 app.register_blueprint(registration_app)
 app.register_blueprint(login_app)
 app.register_blueprint(homepage_seller_app)
@@ -27,7 +30,7 @@ app.register_blueprint(homepage_buyer_app)
 app.register_blueprint(cart_app)
 app.register_blueprint(viewproduct_app)
 
-
+# Main route
 @app.route('/')
 def index():
     return render_template('index.html')

@@ -5,53 +5,131 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agrimart - Filtered Products</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/homepage_buyer.css') }}">
-</head>
-<body>
-    <div class="banner">
-        <img src="{{ url_for('static', filename='images/header.png') }}" alt="LocaLister Banner Image">
-        <div class="buttons">
-            <form action="{{ url_for('homepage_buyer.logout') }}" method="post">
-                <button class="button-left">LOGOUT</button>
-            </form>
-            <a href="{{ url_for('cart.cart') }}" class="button-right">
-                <img src="{{ url_for('static', filename='images/cart.png') }}" alt="Cart Icon">
-            </a>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+  
+    <!-- Header -->
+    <header class="top-bar">
+      <div class="logo">
+          <img src="static/images/logo.png" alt="Agrimart Logo" class="logo-icon">
+          Agrimart
+      </div>          
+      <div class="tagline">Connecting you to Local Farmers</div>
+    </header>
+  
+    <!-- Navigation Menu -->
+    <nav class="nav-menu">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </nav>
+    
+    <!-- Breadcrumb Navigation -->
+  <nav class="main-nav">
+    <ul class="breadcrumb">
+      <li><a href="/index"><i class="fas fa-home"></i></a></li>
+      <li>›</li>
+      <li>
+        <a href="/homepage_buyer" class="button">All Products</a>
+      </li>
+      
+        
+    </ul>
+    
+    <div class="icons">
+        <span class="cart">
+          <a href="{{ url_for('cart.cart') }}" class="cart-link">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="badge">2</span>
+          </a>
+        </span>
+        <div class="user-dropdown" id="userDropdown">
+            <span class="user" id="userIcon"><i class="fas fa-user"></i></span>
+            <div class="user-menu" id="userMenu">
+              <a href="#">Profile</a>
+              <a href="#">Settings</a>
+              <form action="{{ url_for('homepage_buyer.logout') }}" method="post">
+                <button class="logout-btn" type="submit">Logout</button>
+              </form>
+            </div>
+          </div>
         </div>
+      </nav>
+      
+
+
+ <!-- Main Container -->
+<div class="container">
+  <aside class="sidebar">
+    <!-- Redesigned CATEGORY Section -->
+    <div class="category-filter">
+      <h3>CATEGORIES</h3>
+      <ul class="category-list">
+        <li>
+          <form action="{{ url_for('homepage_buyer.filter_products', category_name='all') }}" method="get">
+            <button type="submit" class="category-item {% if selected_category == 'all' %}active{% endif %}">
+              All Products
+            </button>
+          </form>
+        </li>
+        {% for category in categories %}
+        <li>
+          <form action="{{ url_for('homepage_buyer.filter_products', category_name=category.Category_Name) }}" method="get">
+            <button type="submit" class="category-item {% if selected_category == category.CategoryID %}active{% endif %}">
+              {{ category.Category_Name }}
+            </button>
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
     </div>
 
-    <div class="content">
-       <div class="side">
-        <h2>FILTERS</h2>
-        <div class="column column-left">
-            <form action="{{ url_for('homepage_buyer.filter_products', category_name='all') }}"  method="get">
-          <button type="submit" class="filter-button" name="selected_category" value="all">All Products</button>
-            </form>
-        {% for category in categories %}
-            <form action="{{ url_for('homepage_buyer.filter_products', category_name=category.Category_Name) }}" method="get">
-                <button type="submit" class="filter-button" name="selected_category" value="{{ category.CategoryID }}">{{ category.Category_Name }}</button>
-            </form>
-        {% endfor %}
-        </div>
-        <div class="status">
-            <h3>STATUS</h3>
-            <form action="{{ url_for('homepage_buyer.to_pay_orders') }}" method="get">
-                <button type="submit" class="stat-button" name="selected_status" value="TO_PAY">TO PAY</button>
-            </form>
-            <form action="{{ url_for('homepage_buyer.to_ship_orders') }}" method="get">
-                <button type="submit" class="stat-button" name="selected_status" value="TO_SHIP">TO SHIP</button>
-            </form>
-            <form action="{{ url_for('homepage_buyer.shipping_orders') }}" method="get">
-                <button type="submit" class="stat-button" name="selected_status" value="SHIPPING">SHIPPING</button>
-            </form>
-            <form action="{{ url_for('homepage_buyer.delivered_orders') }}" method="get">
-                <button type="submit" class="stat-button" name="selected_status" value="DELIVERED">DELIVERED</button>
-            </form>
-            <form action="{{ url_for('homepage_buyer.cancelled_orders') }}" method="get">
-                <button type="submit" class="stat-button" name="selected_status" value="CANCELLED">CANCELLED</button>
-            </form>
-       </div>
-        </div>
-</div>
+    <!-- Redesigned STATUS Section -->
+    <div class="status">
+      <h3>STATUS</h3>
+      <ul class="status-list">
+        <li>
+          <form action="{{ url_for('homepage_buyer.to_pay_orders') }}" method="get">
+            <button type="submit" class="status-item">
+              <i class="fas fa-wallet"></i> To Pay
+            </button>
+          </form>
+        </li>
+        <li>
+          <form action="{{ url_for('homepage_buyer.to_ship_orders') }}" method="get">
+            <button type="submit" class="status-item">
+              <i class="fas fa-box"></i> To Ship
+            </button>
+          </form>
+        </li>
+        <li>
+          <form action="{{ url_for('homepage_buyer.shipping_orders') }}" method="get">
+            <button type="submit" class="status-item">
+              <i class="fas fa-truck"></i> Shipping
+            </button>
+          </form>
+        </li>
+        <li>
+          <form action="{{ url_for('homepage_buyer.delivered_orders') }}" method="get">
+            <button type="submit" class="status-item">
+              <i class="fas fa-check-circle"></i> Delivered
+            </button>
+          </form>
+        </li>
+        <li>
+          <form action="{{ url_for('homepage_buyer.cancelled_orders') }}" method="get">
+            <button type="submit" class="status-item">
+              <i class="fas fa-times-circle"></i> Cancelled
+            </button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </aside>
 
         <div class="column column-right">
             <h4>PRODUCTS</h4>
