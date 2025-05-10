@@ -35,7 +35,7 @@ def generate_product_id():
 
 class Product:
     VOLUMETRIC_FACTOR = 5000
-    SHIPPING_RATE_PER_UNIT_WEIGHT = 50
+    SHIPPING_RATE_PER_UNIT_WEIGHT = 20
     def __init__(self, productname, weight, packaging_length, packaging_width, packaging_height, category_id, image):
         self.productname = productname
         self.weight = weight
@@ -47,8 +47,8 @@ class Product:
         self.variations = []  
         self.product_id = None
 
-    def add_variation(self, price, quantity, color=None, size=None):
-        variation = {'price': price, 'quantity': quantity, 'color': color, 'size': size}
+    def add_variation(self, price, quantity, unit=None):
+        variation = {'price': price, 'quantity': quantity, 'unit': unit}
         self.variations.append(variation)
 
     def generate_variation_id(self):
@@ -94,8 +94,8 @@ class Product:
             
             for variation in self.variations:
                 variation_id = self.generate_variation_id() 
-                variation_query = "INSERT INTO Product_Variation (VariationID, ProductID, Color, Size, Price, Quantity) VALUES (%s, %s, %s, %s, %s, %s)"
-                variation_values = (variation_id, self.product_id, variation.get('color', None), variation.get('size', None), variation['price'], variation['quantity'])
+                variation_query = "INSERT INTO Product_Variation (VariationID, ProductID, Unit, Price, Quantity) VALUES (%s, %s, %s, %s, %s)"
+                variation_values = (variation_id, self.product_id, variation.get('unit', None), variation['price'], variation['quantity'])
                 cursor.execute(variation_query, variation_values)
                 conn.commit()
 
@@ -131,16 +131,15 @@ def add_product():
         if productname and weight and packaging_length and packaging_width and packaging_height and category_id:
             product = Product(productname, weight, packaging_length, packaging_width, packaging_height, category_id, image_filename)
 
-            colors = request.form.getlist('Color')
-            sizes = request.form.getlist('Size')
+            unit = request.form.getlist('Unit')
             prices = request.form.getlist('Price')
             quantities = request.form.getlist('Quantity')
 
           
-            for price, quantity, color, size in zip(prices, quantities, colors, sizes,):
+            for price, quantity, unit in zip(prices, quantities, unit,):
                 price = float(price) if price else None
                 quantity = int(quantity) if quantity else None
-                product.add_variation(price, quantity, color, size)
+                product.add_variation(price, quantity, unit)
 
             success = product.insert_into_database(session['user_id'])
 

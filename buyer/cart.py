@@ -21,7 +21,7 @@ def fetch_cart_items_for_buyer(user_id):
     cursor = conn.cursor()
 
     query = """
-        SELECT Cart.CartID, Cart.ProductID, Cart.VariationID, Product.Product_Name, Product.ImageFilename, Cart.Cart_Quantity, Product_Variation.Color, Product_Variation.Size, Product_Variation.Price
+        SELECT Cart.CartID, Cart.ProductID, Cart.VariationID, Product.Product_Name, Product.ImageFilename, Cart.Cart_Quantity, Product_Variation.Unit, Product_Variation.Price
         FROM Cart
         JOIN Product ON Cart.ProductID = Product.ProductID
         JOIN Product_Variation ON Cart.VariationID = Product_Variation.VariationID
@@ -40,7 +40,7 @@ def fetch_selected_items_details(selected_items):
     cursor = conn.cursor()
 
     query = f"""
-        SELECT Cart.ProductID, Cart.VariationID, Product.Product_Name, Product_Variation.Color, Product_Variation.Size, Product_Variation.Price, Cart.Cart_Quantity, Product.ImageFilename, Product.Shipping_Fee, Product.SellerID
+        SELECT Cart.ProductID, Cart.VariationID, Product.Product_Name, Product_Variation.Unit, Product_Variation.Price, Cart.Cart_Quantity, Product.ImageFilename, Product.Shipping_Fee, Product.SellerID
         FROM Cart
         JOIN Product ON Cart.ProductID = Product.ProductID
         JOIN Product_Variation ON Cart.VariationID = Product_Variation.VariationID
@@ -51,7 +51,7 @@ def fetch_selected_items_details(selected_items):
 
     total_payment = 0
     for item in selected_items_details:
-        product_total = (item[6] * item[8]) + (item[5] * item[6]) + 20
+        product_total = (item[5] * item[7]) + (item[4] * item[5]) + 10
         total_payment += product_total
 
     payment_options = fetch_payment_options(selected_items_details)
@@ -66,7 +66,7 @@ def fetch_payment_options(selected_items_details):
     cursor = conn.cursor()
 
     payment_query = """
-        SELECT po.sellerid, po.payment_optionsid, p.product_name, pv.variationid, po.payment_method, po.account_number, pv.color, pv.size
+        SELECT po.sellerid, po.payment_optionsid, p.product_name, pv.variationid, po.payment_method, po.account_number, pv.unit
         FROM payment_options po
         JOIN Product p ON po.sellerid = p.SellerID
         JOIN Product_Variation pv ON p.ProductID = pv.ProductID
@@ -95,8 +95,7 @@ def fetch_payment_options(selected_items_details):
                     'payment_optionsid': option[1],  
                     'product_name': option[2],
                     'variation_id': option[3],
-                    'color': option[6],
-                    'size': option[7],
+                    'unit': option[6],
                     'payment_method': option[4],
                     'account_number': option[5]
                 })
