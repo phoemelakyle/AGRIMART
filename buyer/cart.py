@@ -284,9 +284,9 @@ def process_checkout():
 
         if selected_items and product_totals and payment_options:
             for item_id, product_total in zip(selected_items, product_totals):
-                seller_id = eval(item_id)[9]
+                seller_id = eval(item_id)[8]
                 variation_id = eval(item_id)[1]
-                cart_quantity = eval(item_id)[6]
+                cart_quantity = eval(item_id)[5]
                 payment_option_id = payment_options.get(variation_id, '')
                 insert_into_buyer_order(user_id, item_id, shipping_address, product_total, payment_option_id)
                 insert_into_seller_order(seller_id, user_id, item_id, shipping_address, product_total, payment_option_id)
@@ -304,6 +304,7 @@ def process_checkout():
         print("Error:", str(e))
         message = "An error occurred. Please try again."
         return render_template('checkout.html', message=message)
+
 
 def delete_item_from_cart(user_id, item_id):
     conn = get_db_connection()
