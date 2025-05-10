@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, flash
 import mysql.connector
-import bcrypt
+from werkzeug.security import generate_password_hash, check_password_hash  # Import from werkzeug
 
 registration_app = Blueprint('registration', __name__)
 
@@ -37,8 +37,8 @@ class User:
         self.password = self.hash_password(password)
 
     def hash_password(self, password):
-        salt = bcrypt.gensalt()
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+        # Use werkzeug's generate_password_hash instead of bcrypt
+        hashed_password = generate_password_hash(password)
         return hashed_password
 
     def insert_into_database(self, table_name, custom_prefix):

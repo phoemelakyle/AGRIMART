@@ -1,8 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="../static/css/login.css">
+  
+    
     <title>Login</title>
+    <script>
+       function openForgotPasswordModal() {
+    document.getElementById('forgot-password-modal').style.display = 'flex'; 
+    document.body.classList.add('modal-active'); 
+}
+
+function closeForgotPasswordModal() {
+    document.getElementById('forgot-password-modal').style.display = 'none';
+    document.body.classList.remove('modal-active'); 
+}
+
+    </script>
+    <link rel="stylesheet" type="text/css" href="../static/css/login.css">
 </head>
 <body>
 
@@ -61,7 +75,11 @@
           <div class="button-container">
             <p class="signup-text">Don't have an account?</p>
             <a href="/select_role" class="button">Sign Up</a>
+           
           </div>
+          <div class="button-container">
+           <p class="forgot-pass">Forgot your password? <a href="#" onclick="openForgotPasswordModal()">Click here</a></p>
+           </div>
         </section>
       </main>
 
@@ -83,6 +101,22 @@
       </div>
     </div>
   </section>
+
+<!--FORGOTPASS-->
+  <div id="forgot-password-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+       
+        <span class="close-button" onclick="closeForgotPasswordModal()">&times;</span>
+        <h2>Forgot your password?</h2>
+        <p class = "p3reset">Please enter the email address you used to register.</p><br>
+        <form method="POST" action="/forgot-password">
+            <label for="email" class="emailreset">Enter your registered email:</label>
+            <input type="email" id="email" name="email" required> <br>
+            <button class="buttonreset" type="submit">Send Password Reset Email</button>
+
+        </form>
+    </div>
+</div>   
 
   <!-- Footer -->
   <footer class="main-footer">

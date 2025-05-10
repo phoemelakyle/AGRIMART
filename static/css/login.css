@@ -359,4 +359,114 @@ body {
     color: #555;
     margin: 0;
   }
-  
+
+   
+  .forgot-pass {
+    font-size: 0.95rem;
+    color: #555;
+    margin: 0;
+  }
+
+
+  /*MODALLL FORGOTPASS*/
+
+  .reset-password-box p {
+    margin-bottom: 12px;
+    color: #000000;
+}
+
+
+.reset-password-box {
+    margin: 0px 90px 0 60px;
+}
+
+.reset-password-box h3 {
+    color: #000000;
+    font-size: 30px;
+    text-align: left;
+}
+
+.p2-reset {
+    display: block;
+    text-align: left;
+    font-size: 15px;
+    
+}
+
+.p3 {
+    display: block;
+    text-align: left;
+    font-size: 14px;
+}
+
+
+body.modal-active {
+    
+    padding-right: calc(100vw - 100%);
+}
+
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative; 
+    width: 400px;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 25px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: rgb(2, 95, 0);
+}
+ 
+.p3reset {
+    display: block;
+    text-align: left;
+    font-size: 15px;
+}
+
+.p2-reset-pw {
+    display: block;
+    text-align: left;
+    font-size: 15px;
+    
+}
+
+.buttonreset {
+    background-color: #009013;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    width: 100%;
+}
+
+
+.buttonreset:hover {
+    background-color: #005804;
+}
+

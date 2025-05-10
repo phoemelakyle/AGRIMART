@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, flash, session
 import mysql.connector
+from werkzeug.security import generate_password_hash, check_password_hash
 import bcrypt
 
 login_app = Blueprint('login', __name__)
@@ -23,7 +24,7 @@ def validate_credentials(username, password):
 
     if user_data:
         user_id, hashed_password = user_data
-        if bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8')):
+        if check_password_hash(hashed_password, password):
             return user_id, 'buyer'
         
     sql_query = "SELECT SellerID, Password FROM Seller WHERE Username = %s"
@@ -35,7 +36,7 @@ def validate_credentials(username, password):
 
     if user_data:
         user_id, hashed_password = user_data
-        if bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8')):
+        if check_password_hash(hashed_password, password):
             return user_id, 'seller'
 
     return None
