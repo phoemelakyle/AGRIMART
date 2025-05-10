@@ -27,21 +27,21 @@
             <div class="selected-item-container">
                     {% for item in selected_items_details %}
                     <input type="hidden" name="selected_items" value="{{ item }}">
-                    <input type="hidden" name="product_total[]" value="{{ (item[6] * item[8]) + (item[5] * item[6]) + 20 }}">
+                    <input type="hidden" name="product_total[]" value="{{ (item[5] * item[7]) + (item[4] * item[5]) + 10 }}">
                     <input type="hidden" name="payment_option_id" id="payment_option_id" value="">
                         <div class="selected-item">
                             <div class="selected-item-image-container">
-                                <img src="{{ url_for('static', filename='images/products/' + item[7]) }}" alt="Product Image"  width="200" height="200">
+                                <img src="{{ url_for('static', filename='images/products/' + item[6]) }}" alt="Product Image"  width="200" height="200">
                             </div>
                             <div class="selected-item-details">
                                 <p class="product-name">{{ item[2] }}</p>
-                                <p class="product-color-size">{{ item[3] }}, {{ item[4] }}</p>
-                                <p class="product-amount">₱{{ item[5] }} x {{item[6]}}</p>
+                                <p class="product-color-size">{{ item[3] }}</p>
+                                <p class="product-amount">₱{{ item[4] }} x {{item[5]}}</p>
                                 <br>
                                 <br>
                                 <br>
-                                {% set product_total = (item[6] * item[8]) + (item[5] * item[6]) + 20 %}
-                                {% set shipping_fee = item[6] * item[8] %}
+                                {% set product_total = (item[5] * item[7]) + (item[4] * item[5]) + 10 %}
+                                {% set shipping_fee = item[5] * item[7] %}
                                 <p class="product-shipping_fee">Shipping Fee: {{shipping_fee}}</p>
                                 <p class="product-total total-amount">Product Total: ₱{{ product_total }}</p>
                             </div>
@@ -64,7 +64,7 @@
            
                             {% set first_option = options['options'][0] %}
            
-                            <p><strong>Color: {{ first_option['color'] }}, Size: {{ first_option['size'] }}</strong></p>
+                            <p><strong>Unit: {{ first_option['unit'] }}</strong></p>
                             <br>
            
                             {% for option in options['options'] %}

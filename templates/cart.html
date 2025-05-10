@@ -22,7 +22,7 @@
     <!-- Navigation Menu -->
     <nav class="nav-menu">
       <ul>
-        <li><a href="/">Home</a></li>
+        <li><a href="/homepage_buyer">Home</a></li>
         <li><a href="#">About Us</a></li>
         <li><a href="#">Contact Us</a></li>
       </ul>
@@ -31,7 +31,7 @@
     <!-- Breadcrumb Navigation -->
   <nav class="main-nav">
     <ul class="breadcrumb">
-      <li><i class="fas fa-home"></i></a></li>
+      <li><a href="/homepage_buyer"><i class="fas fa-home"></i></a></li>
       <li>›</li>
       <li>
         <a href="/cart" class="button">Cart</a>
@@ -68,8 +68,8 @@
                             </div>
                             <div class="cart-item-details">
                                 <p class="product-name">{{ item[3] }}</p>
-                                <p class="product-color-size">{{ item[6] }}, {{ item[7] }}</p>
-                                <p class="product-amount">₱{{ item[8] }}</p>
+                                <p class="product-color-size">{{ item[6] }}</p>
+                                <p class="product-amount">₱{{ item[7] }}</p>
                                 <div class="quantity-controls">
                                     <button type="button" class="quantity-decrease" onclick="updateQuantity('{{ item[1] }}_{{ item[2] }}', 'decrement')">-</button>
                                     <input type="number" name="quantity_{{ item[1] }}_{{ item[2] }}" value="{{ item[5] }}" class="quantity-input" readonly>
