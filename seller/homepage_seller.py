@@ -98,12 +98,12 @@ def generate_variation_id():
 
         return variation_id
    
-def add_variation_to_product(product_id, color, size, price, quantity):
+def add_variation_to_product(product_id, unit, price, quantity):
     conn = get_db_connection()
     cursor = conn.cursor()
     variation_id = generate_variation_id()
-    variation_query = "INSERT INTO Product_Variation (VariationID, ProductID, Color, Size, Price, Quantity) VALUES (%s, %s, %s, %s, %s, %s)"
-    variation_values = (variation_id, product_id, color, size, price, quantity)
+    variation_query = "INSERT INTO Product_Variation (VariationID, ProductID, Unit, Price, Quantity) VALUES (%s, %s, %s, %s, %s)"
+    variation_values = (variation_id, product_id, unit, price, quantity)
     cursor.execute(variation_query, variation_values)
     conn.commit()
     cursor.close()
@@ -118,11 +118,11 @@ def fetch_variation_details(variation_id):
     conn.close()
     return variation
 
-def update_variation(variation_id, color, size, price, quantity):
+def update_variation(variation_id, unit, price, quantity):
     conn = get_db_connection()
     cursor = conn.cursor()
-    update_query = "UPDATE Product_Variation SET Color = %s, Size = %s, Price = %s, Quantity = %s WHERE VariationID = %s"
-    update_values = (color, size, price, quantity, variation_id)
+    update_query = "UPDATE Product_Variation SET Unit = %s, Price = %s, Quantity = %s WHERE VariationID = %s"
+    update_values = (unit, price, quantity, variation_id)
     cursor.execute(update_query, update_values)
     conn.commit()
     cursor.close()
@@ -202,21 +202,19 @@ def edit_product(product_id):
         update_product(product_id, new_product_name, new_weight, new_packaging_length, new_packaging_width, new_packaging_height, new_shipping_fee, image_filename)
 
         existing_variations = request.form.getlist('existing_variations[]')
-        existing_colors = request.form.getlist('color[]')
-        existing_sizes = request.form.getlist('size[]')
+        existing_units = request.form.getlist('unit[]')
         existing_prices = request.form.getlist('price[]')
         existing_quantities = request.form.getlist('quantity[]')
 
-        for variation_id, color, size, price, quantity in zip(existing_variations, existing_colors, existing_sizes, existing_prices, existing_quantities):
-            update_variation(variation_id, color, size, price, quantity)
+        for variation_id, unit, price, quantity in zip(existing_variations, existing_units, existing_prices, existing_quantities):
+            update_variation(variation_id, unit, price, quantity)
 
-        new_colors = request.form.getlist('new_color[]')
-        new_sizes = request.form.getlist('new_size[]')
+        new_units = request.form.getlist('new_unit[]')
         new_prices = request.form.getlist('new_price[]')
         new_quantities = request.form.getlist('new_quantity[]')
 
-        for color, size, price, quantity in zip(new_colors, new_sizes, new_prices, new_quantities):
-            add_variation_to_product(product_id, color, size, price, quantity)
+        for unit, price, quantity in zip(new_units, new_prices, new_quantities):
+            add_variation_to_product(product_id, unit, price, quantity)
        
         variations = fetch_variations_for_product(product_id)
 
