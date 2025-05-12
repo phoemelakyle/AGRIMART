@@ -14,17 +14,25 @@ db_config = {
 def get_db_connection():
     return mysql.connector.connect(**db_config)
 
-def get_unpaid_orders_data(user_id):
+def get_unpaid_orders_data(user_id, sort='recent'):
     order_details = []
 
     try:
         with get_db_connection() as connection:
             cursor = connection.cursor(dictionary=True)
 
-            query_orders = """
-            SELECT OrderID, ProductID, VariationID, Quantity, Total_Amount, Order_Date, Payment_OptionsID, Shipping_Address
+
+            if sort == 'old':
+                order_by = 'ASC'
+            else:
+                order_by = 'DESC'
+
+
+            query_orders = f"""
+            SELECT OrderID, ProductID, VariationID, Quantity, Total_Amount, Order_Date, Payment_OptionsID, Shipping_Address, Order_Date
             FROM Seller_Order
             WHERE Order_Status = 'waiting for payment' AND SellerID = %s
+            ORDER BY Order_Date {order_by}
             """
             cursor.execute(query_orders, (user_id,))
             orders = cursor.fetchall()
@@ -32,6 +40,7 @@ def get_unpaid_orders_data(user_id):
             for order in orders:
                 product_id = order['ProductID']
                 variation_id = order['VariationID']
+                order_date = order['Order_Date']
 
                 query_product = """
                 SELECT Product_Name, ImageFileName, Shipping_Fee
@@ -59,8 +68,14 @@ def get_unpaid_orders_data(user_id):
                     'Price': variation_info['Price'],
                     'Total_Amount': order['Total_Amount'],
                     'Shipping_Address': order['Shipping_Address'],
+                    'Order_Date': order['Order_Date'],
                 }
                 order_details.append(order_detail)
+
+
+            print(sort)
+            print("ORDER BY:", order_by)
+            print("Final Query:", query_orders)
 
     except mysql.connector.Error as err:
         print(f"Error: {err}")
@@ -70,22 +85,30 @@ def get_unpaid_orders_data(user_id):
 @seller_orders_app.route('/unpaid_orders', methods=['POST','GET'])
 def unpaid_orders():
     user_id = session.get('user_id')
-    order_details = get_unpaid_orders_data(user_id)
+    sort = request.args.get('sort', 'recent')
+    order_details = get_unpaid_orders_data(user_id, sort)
 
     order_type = 'unpaid'
     return render_template('seller_orders.html', order_details=order_details, order_type=order_type)
 
-def get_to_ship_orders_data(user_id):
+def get_to_ship_orders_data(user_id, sort='recent'):
     order_details = []
 
     try:
         with get_db_connection() as connection:
             cursor = connection.cursor(dictionary=True)
 
-            query_orders = """
-            SELECT OrderID, ProductID, VariationID, Quantity, Total_Amount, Order_Date, Payment_OptionsID, Shipping_Address
+            if sort == 'old':
+                order_by = 'ASC'
+            else:
+                order_by = 'DESC'
+
+
+            query_orders = f"""
+            SELECT OrderID, ProductID, VariationID, Quantity, Total_Amount, Order_Date, Payment_OptionsID, Shipping_Address, Order_Date
             FROM Seller_Order
             WHERE Order_Status = 'pending' AND SellerID = %s
+            ORDER BY Order_Date {order_by}
             """
             cursor.execute(query_orders, (user_id,))
             orders = cursor.fetchall()
@@ -93,6 +116,7 @@ def get_to_ship_orders_data(user_id):
             for order in orders:
                 product_id = order['ProductID']
                 variation_id = order['VariationID']
+                order_date = order['Order_Date']
 
                 query_product = """
                 SELECT Product_Name, ImageFileName, Shipping_Fee
@@ -120,6 +144,7 @@ def get_to_ship_orders_data(user_id):
                     'Price': variation_info['Price'],
                     'Total_Amount': order['Total_Amount'],
                     'Shipping_Address': order['Shipping_Address'],
+                    'Order_Date': order['Order_Date'],
                 }
                 order_details.append(order_detail)
 
@@ -131,7 +156,8 @@ def get_to_ship_orders_data(user_id):
 @seller_orders_app.route('/to_ship_orders', methods=['POST','GET'])
 def to_ship_orders():
     user_id = session.get('user_id')
-    order_details = get_to_ship_orders_data(user_id)
+    sort = request.args.get('sort', 'recent')
+    order_details = get_to_ship_orders_data(user_id, sort)
 
     order_type = 'to_ship'
     return render_template('seller_orders.html', order_details=order_details, order_type=order_type)
@@ -140,15 +166,19 @@ def to_ship_orders():
 def shipping_orders():
     user_id = session.get('user_id')
     order_details = []  
+    sort = request.args.get('sort', 'recent')
 
     try:
         with get_db_connection() as connection:
             cursor = connection.cursor(dictionary=True)
 
-            query_orders = """
-            SELECT OrderID, ProductID, VariationID, Quantity, Total_Amount, Order_Date, Payment_OptionsID, Shipping_Address, Shipping_Date
+            order_by = 'ASC' if sort == 'old' else 'DESC'
+
+            query_orders = f"""
+            SELECT OrderID, ProductID, VariationID, Quantity, Total_Amount, Order_Date, Payment_OptionsID, Shipping_Address, Shipping_Date, Order_Date
             FROM Seller_Order
             WHERE Order_Status = 'shipping' AND SellerID = %s
+            ORDER BY Order_Date {order_by}
             """
             cursor.execute(query_orders, (user_id,))
             orders = cursor.fetchall()
@@ -156,63 +186,7 @@ def shipping_orders():
             for order in orders:
                 product_id = order['ProductID']
                 variation_id = order['VariationID']
-
-                query_product = """
-                SELECT Product_Name, ImageFileName, Shipping_Fee
-                FROM Product
-                WHERE ProductID = %s
-                """
-                cursor.execute(query_product, (product_id,))
-                product_info = cursor.fetchone()
-
-                query_variation = """
-                SELECT Unit, Price
-                FROM Product_Variation
-                WHERE VariationID = %s
-                """
-                cursor.execute(query_variation, (variation_id,))
-                variation_info = cursor.fetchone()
-
-                order_detail = {
-                    'ImageFileName': product_info['ImageFileName'],
-                    'Product_Name': product_info['Product_Name'],
-                    'Shipping_Fee': product_info['Shipping_Fee'],
-                    'Unit': variation_info['Unit'],
-                    'Quantity': order['Quantity'],
-                    'OrderID': order['OrderID'],
-                    'Price': variation_info['Price'],
-                    'Total_Amount': order['Total_Amount'],
-                    'Shipping_Address': order['Shipping_Address'],
-                    'Shipping_Date':order['Shipping_Date'],
-                }
-                order_details.append(order_detail)
-
-    except mysql.connector.Error as err:
-        print(f"Error: {err}")
-
-    order_type = 'shipping'  
-    return render_template('seller_orders.html', order_details=order_details, order_type=order_type)
-
-@seller_orders_app.route('/delivered_orders', methods=['POST','GET'])
-def delivered_orders():
-    user_id = session.get('user_id')
-    order_details = []  
-
-    try:
-        with get_db_connection() as connection:
-            cursor = connection.cursor(dictionary=True)
-
-            query_orders = """
-            SELECT OrderID, ProductID, VariationID, Quantity, Total_Amount, Order_Date, Payment_OptionsID, Shipping_Address, Shipping_Date
-            FROM Seller_Order
-            WHERE Order_Status = 'delivered' AND SellerID = %s
-            """
-            cursor.execute(query_orders, (user_id,))
-            orders = cursor.fetchall()
-            
-            for order in orders:
-                product_id = order['ProductID']
-                variation_id = order['VariationID']
+                order_date = order['Order_Date']
 
                 query_product = """
                 SELECT Product_Name, ImageFileName, Shipping_Fee
@@ -241,28 +215,33 @@ def delivered_orders():
                     'Total_Amount': order['Total_Amount'],
                     'Shipping_Address': order['Shipping_Address'],
                     'Shipping_Date': order['Shipping_Date'],
+                    'Order_Date': order['Order_Date'],
                 }
                 order_details.append(order_detail)
 
     except mysql.connector.Error as err:
         print(f"Error: {err}")
 
-    order_type = 'delivered'  
+    order_type = 'shipping'  
     return render_template('seller_orders.html', order_details=order_details, order_type=order_type)
 
-@seller_orders_app.route('/cancelled_orders', methods=['POST','GET'])
-def cancelled_orders():
+@seller_orders_app.route('/delivered_orders', methods=['POST','GET'])
+def delivered_orders():
     user_id = session.get('user_id')
     order_details = []  
+    sort = request.args.get('sort', 'recent')
 
     try:
         with get_db_connection() as connection:
             cursor = connection.cursor(dictionary=True)
 
-            query_orders = """
-            SELECT OrderID, ProductID, VariationID, Quantity, Total_Amount, Order_Date, Payment_OptionsID, Shipping_Address
+            order_by = 'ASC' if sort == 'old' else 'DESC'
+
+            query_orders = f"""
+            SELECT OrderID, ProductID, VariationID, Quantity, Total_Amount, Order_Date, Payment_OptionsID, Shipping_Address, Shipping_Date, Order_Date
             FROM Seller_Order
-            WHERE Order_Status = 'cancelled' AND SellerID = %s
+            WHERE Order_Status = 'delivered' AND SellerID = %s
+            ORDER BY Order_Date {order_by}
             """
             cursor.execute(query_orders, (user_id,))
             orders = cursor.fetchall()
@@ -270,6 +249,7 @@ def cancelled_orders():
             for order in orders:
                 product_id = order['ProductID']
                 variation_id = order['VariationID']
+                order_date = order['Order_Date']
 
                 query_product = """
                 SELECT Product_Name, ImageFileName, Shipping_Fee
@@ -297,6 +277,70 @@ def cancelled_orders():
                     'Price': variation_info['Price'],
                     'Total_Amount': order['Total_Amount'],
                     'Shipping_Address': order['Shipping_Address'],
+                    'Shipping_Date': order['Shipping_Date'],
+                    'Order_Date': order['Order_Date'],
+                }
+                order_details.append(order_detail)
+
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+
+    order_type = 'delivered'  
+    return render_template('seller_orders.html', order_details=order_details, order_type=order_type)
+
+@seller_orders_app.route('/cancelled_orders', methods=['POST','GET'])
+def cancelled_orders():
+    user_id = session.get('user_id')
+    order_details = []  
+    sort = request.args.get('sort', 'recent')
+
+    try:
+        with get_db_connection() as connection:
+            cursor = connection.cursor(dictionary=True)
+
+            order_by = 'ASC' if sort == 'old' else 'DESC'
+
+            query_orders = f"""
+            SELECT OrderID, ProductID, VariationID, Quantity, Total_Amount, Order_Date, Payment_OptionsID, Shipping_Address, Order_Date
+            FROM Seller_Order
+            WHERE Order_Status = 'cancelled' AND SellerID = %s
+            ORDER BY Order_Date {order_by}
+            """
+            cursor.execute(query_orders, (user_id,))
+            orders = cursor.fetchall()
+            
+            for order in orders:
+                product_id = order['ProductID']
+                variation_id = order['VariationID']
+                order_date = order['Order_Date']
+
+                query_product = """
+                SELECT Product_Name, ImageFileName, Shipping_Fee
+                FROM Product
+                WHERE ProductID = %s
+                """
+                cursor.execute(query_product, (product_id,))
+                product_info = cursor.fetchone()
+
+                query_variation = """
+                SELECT Unit, Price
+                FROM Product_Variation
+                WHERE VariationID = %s
+                """
+                cursor.execute(query_variation, (variation_id,))
+                variation_info = cursor.fetchone()
+
+                order_detail = {
+                    'ImageFileName': product_info['ImageFileName'],
+                    'Product_Name': product_info['Product_Name'],
+                    'Shipping_Fee': product_info['Shipping_Fee'],
+                    'Unit': variation_info['Unit'],
+                    'Quantity': order['Quantity'],
+                    'OrderID': order['OrderID'],
+                    'Price': variation_info['Price'],
+                    'Total_Amount': order['Total_Amount'],
+                    'Shipping_Address': order['Shipping_Address'],
+                    'Order_Date': order['Order_Date'],
                 }
                 order_details.append(order_detail)
 
