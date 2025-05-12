@@ -6,7 +6,9 @@
   <title>Agrimart - Homepage</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 
 </head>
 <body>
@@ -21,6 +23,7 @@
     </div>
   </header>
 
+
   <!-- Navigation -->
  <nav class="main-nav">
   <div class="nav-left">
@@ -32,11 +35,12 @@
       </button>
     </div>
     <ul>
-      <li>Home</li>
-      <li>About Us</li>
-      <li>Contact Us</li>
+      <li><a href="/">Home</a></li>
+      <li><a href="#about-agrimart">About Us</a></li>
+      <li><a href="#newsletter">Contacts</a></li>
     </ul>
   </div>
+
 
   <div class="icons">
     <div class="user-dropdown">
@@ -49,6 +53,8 @@
     </div>
   </div>
 </nav>
+
+
 
 
   <!-- Main Layout -->
@@ -118,6 +124,8 @@
   </aside>
 
 
+
+
     <!-- Banner -->
     <main class="banner">
       <div class="banner-text">
@@ -131,6 +139,7 @@
     </main>
   </div>
 
+
  
   <!-- Features Section -->
   <footer class="features">
@@ -140,31 +149,32 @@
     <div>💰 Money-Back Guarantee<br /><small>30 days money-back</small></div>
   </footer>
 
+
  <!-- Top Categories Section -->
 <section class="top-categories">
     <h2 class="section-title">Shop by Top Categories</h2>
     <div class="category-grid">
-  
+ 
       <div class="category-card">
         <img src="/static/images/categories/fruits.png" alt="Fruits">
         <p>Fruits</p>
       </div>
-  
+ 
       <div class="category-card">
         <img src="/static/images/categories/vegetables.png" alt="Vegetables">
         <p>Vegetables</p>
       </div>
-  
+ 
       <div class="category-card">
         <img src="/static/images/categories/grains.png" alt="Grains">
         <p>Grains</p>
       </div>
-  
+ 
       <div class="category-card">
         <img src="/static/images/categories/dairy.png" alt="Grains">
         <p>Dairy</p>
       </div>
-  
+ 
       <div class="category-card">
         <img src="/static/images/categories/spices.png" alt="Grains">
         <p>Spices</p>
@@ -183,35 +193,37 @@
       </div>
     </div>
   </section>
-  
-  
-  
+ 
+ 
+ 
   <!-- About Agrimart Section -->
-<section class="about-agrimart">
+  <section id="about-agrimart">
   <div class="info-container">
     <div class="info-text">
       <h2 class="section-title">Welcome to Agrimart</h2>
       <p>
-        <strong>Agrimart</strong> is a modern online shopping platform that connects local farmers directly with buyers. 
-        By minimizing the role of middlemen, Agrimart ensures fair pricing, promotes sustainability, 
+        <strong>Agrimart</strong> is a modern online shopping platform that connects local farmers directly with buyers.
+        By minimizing the role of middlemen, Agrimart ensures fair pricing, promotes sustainability,
         and delivers fresh farm products straight to your doorstep.
       </p>
       <p>
-        Whether you're a consumer looking for organic produce or a farmer seeking a fair marketplace, 
+        Whether you're a consumer looking for organic produce or a farmer seeking a fair marketplace,
         Agrimart empowers communities through transparency, trust, and technology.
       </p>
     </div>
     <div class="info-image">
       <img src="static/images/try2.png" alt="basket" class="basket">
     </div>
-    
+   
   </div>
 </section>
 
 
-  
+
+
+ 
  <!-- Newsletter -->
- <section class="newsletter">
+ <section id ="newsletter">
   <div class="newsletter-content">
     <div class="newsletter-text">
       <h3><i class="fas fa-envelope"></i> Subscribe to our Newsletter</h3>
@@ -229,13 +241,14 @@
   </div>
 </section>
 
+
 <!-- Footer -->
 <footer class="main-footer">
   <div class="footer-content">
     <div class="footer-about">
       <img src="static/images/logo.png" alt="Agrimart Logo" class="logo-icon">
       Agrimart
-  
+ 
       <p>Empowering farmers and connecting communities through sustainable commerce.</p>
       <p><strong>09271674524</strong><br />agrimart@.com</p>
     </div>
@@ -290,10 +303,12 @@
     const userIcon = document.getElementById('userIcon');
     const userMenu = document.getElementById('userMenu');
 
+
     userIcon.addEventListener('click', function (event) {
       userMenu.classList.toggle('show');
       event.stopPropagation(); // Prevents event from bubbling up
     });
+
 
     // Close the dropdown if clicked outside
     document.addEventListener('click', function (event) {
@@ -304,6 +319,7 @@
   });
 </script>
 
+
 <script>document.addEventListener("DOMContentLoaded", () => {
   // Sidebar toggle for mobile
   const burgerBtn = document.getElementById("burgerBtn");
@@ -311,11 +327,13 @@
   const categoryText = document.getElementById("categoryText");
   const categoryList = document.getElementById("categoryList");
 
+
   if (burgerBtn && sidebar) {
     burgerBtn.addEventListener("click", () => {
       sidebar.classList.toggle("hidden");
     });
   }
+
 
   if (categoryText && categoryList) {
     categoryText.addEventListener("click", (e) => {
@@ -326,12 +344,14 @@
       }
     });
 
+
     document.addEventListener("click", (e) => {
       if (!e.target.closest(".category-dropdown")) {
         categoryList.classList.add("hidden");
       }
     });
   }
+
 
   // Add to cart button alert
   document.querySelectorAll(".add-btn").forEach(button => {
@@ -340,6 +360,7 @@
       // You can add real cart logic here
     });
   });
+
 
   // Newsletter form submission
   const newsletterForm = document.querySelector('.newsletter-form');
@@ -351,6 +372,25 @@
   }
 });
 </script>
+
+
+<script>
+  // Select all list items in the nav
+  const navItems = document.querySelectorAll('.main-nav ul li');
+
+
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      // Remove active class from all
+      navItems.forEach(el => el.classList.remove('active'));
+      // Add active class to clicked item
+      item.classList.add('active');
+    });
+  });
+</script>
+
+
+
 
 </body>
 </html>
