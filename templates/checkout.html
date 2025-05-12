@@ -1,111 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agrimart - Add Product</title>
     <link rel="stylesheet" type="text/css" href="../static/css/checkout.css">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agrimart - Checkout</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage_buyer.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <div class="Logout">
-            <form action="{{ url_for('homepage_seller.logout') }}" method="post">
-                <button class="logout-button">LOGOUT</button>
-            </form>
-        </div>
-        <div class="back">
-            <a href="{{ url_for('cart.cart') }}" class="button-left">BACK</a>
-        </div>
-    </header>
-    <div class="container">
-        <div class="title-container">
-            <h1>CHECKOUT</h1>
-        </div>
+
+
+    <!-- Header -->
+  <header class="top-bar">
+    <div class="logo">
+        <img src="static/images/logo.png" alt="Agrimart Logo" class="logo-icon">
+        Agrimart
+    </div>          
+    <div class="tagline">Connecting you to Local Farmers</div>
+  </header>
+
+
+  <!-- Navigation Menu -->
+  <nav class="nav-menu">
+    <ul>
+      <li><a href="/homepage_buyer">Home</a></li>
+        <li><a href="#contacts">Contacts</a></li>
+    </ul>
+  </nav>
+ 
+  <!-- Breadcrumb Navigation -->
+<nav class="main-nav">
+  <ul class="breadcrumb">
+    <li><a href="/homepage_buyer"> <i class="fas fa-home"></i></a></li>
+    <li>›</li>
+    <li>
+      <a href="/homepage_buyer" class="button">All Products</a>
+    </li>
+   
+     
+  </ul>
+ 
+  <div class="icons">
+    <span class="cart">
+      <a href="{{ url_for('cart.cart') }}" class="cart-link">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="badge">2</span>
+      </a>
+    </span>
+   
+    <div class="user-dropdown" id="userDropdown">
+      <span class="user" id="userIcon"><i class="fas fa-user"></i></span>
+      <div class="user-menu" id="userMenu">
+        <a href="#">Profile</a>
+        <a href="#">Settings</a>
+        <form action="{{ url_for('homepage_buyer.logout') }}" method="post">
+          <button class="logout-btn" type="submit">Logout</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+
+
+<div class="container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+   
+    <!-- Buyer Menu -->
+    <div class="status">
+      <h3>BUYER MENU</h3>
+      <ul class="status-list">
+        <li>
+          <form action="/homepage_buyer" method="get">
+            <button type="submit" class="status-item"><i class="fas fa-home"></i> Homepage</button>
+          </form>
+        </li>
+        <li>
+          <form action="{{ url_for('homepage_buyer.to_pay_orders') }}" method="get">
+            <button type="submit" class="status-item"><i class="fas fa-receipt"></i> Orders</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </aside>
+
+
+   <main class="main-container">
+    <section class="cart-box">
+        <h2>Checkout</h2>
         <form action="{{ url_for('cart.process_checkout') }}" method="post" enctype="multipart/form-data">
-        <div class="checkout-item-container">
-            {% if selected_items_details %}
-            <div class="selected-item-container">
+            <div class="cart-items">
+                {% if selected_items_details %}
                     {% for item in selected_items_details %}
-                    <input type="hidden" name="selected_items" value="{{ item }}">
-                    <input type="hidden" name="product_total[]" value="{{ (item[5] * item[7]) + (item[4] * item[5]) + 10 }}">
-                    <input type="hidden" name="payment_option_id" id="payment_option_id" value="">
-                        <div class="selected-item">
-                            <div class="selected-item-image-container">
-                                <img src="{{ url_for('static', filename='images/products/' + item[6]) }}" alt="Product Image"  width="200" height="200">
+                        <div class="cart-item">
+                            <input type="hidden" name="selected_items" value="{{ item }}">
+                            <input type="hidden" name="product_total[]" value="{{ (item[5] * item[7]) + (item[4] * item[5]) + 10 }}">
+                            <input type="hidden" name="payment_option_id" id="payment_option_id" value="">
+
+
+                            <div class="cart-item-image">
+                                <img src="{{ url_for('static', filename='images/products/' + item[6]) }}" alt="Product Image">
                             </div>
-                            <div class="selected-item-details">
+                            <div class="cart-item-details">
                                 <p class="product-name">{{ item[2] }}</p>
                                 <p class="product-color-size">{{ item[3] }}</p>
                                 <p class="product-amount">₱{{ item[4] }} x {{item[5]}}</p>
-                                <br>
-                                <br>
-                                <br>
                                 {% set product_total = (item[5] * item[7]) + (item[4] * item[5]) + 10 %}
                                 {% set shipping_fee = item[5] * item[7] %}
-                                <p class="product-shipping_fee">Shipping Fee: {{shipping_fee}}</p>
+                                <p class="product-shipping_fee">Shipping Fee: ₱{{shipping_fee}}</p>
                                 <p class="product-total total-amount">Product Total: ₱{{ product_total }}</p>
                             </div>
                         </div>
                     {% endfor %}
-            </div>
-            <div class="line-container">
-                <hr class="custom-line">
-            </div>
-            <div class="second-container">
-                <h2>Payment Options</h2>
-                <div class="payment-options-container">
-                    {% for variation_id, options in payment_options.items() %}
-                        <div class="payment-option">
-                            <h3><strong>Product Name:
-                                {% for product_name in options['product_names'] %}
-                                    {{ product_name }}{% if not loop.last %}, {% endif %}
+
+
+                    <hr class="custom-line">
+
+
+                    <div class="payment-section">
+                        <h3>Payment Options</h3>
+                        {% for variation_id, options in payment_options.items() %}
+                            <div class="payment-option">
+                                <h4>
+                                    Product Name:
+                                    {% for product_name in options['product_names'] %}
+                                        {{ product_name }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </h4>
+                                <p>Unit: {{ options['options'][0]['unit'] }}</p>
+
+
+                                {% for option in options['options'] %}
+                                    <label class="payment-label">
+                                        <input type="radio" name="payment_option_{{ variation_id }}" value="{{ option['payment_optionsid'] }}" onchange="handlePaymentOptionSelection('{{ variation_id }}')">
+                                        {% if option['payment_method'] == 'Cash on Delivery' %}
+                                            <span>{{ option['payment_method'] }}</span>
+                                        {% else %}
+                                            <span>{{ option['payment_method'] }}, Account #: {{ option['account_number'] }}</span>
+                                        {% endif %}
+                                    </label><br>
                                 {% endfor %}
-                            </strong></h3>
-           
-                            {% set first_option = options['options'][0] %}
-           
-                            <p><strong>Unit: {{ first_option['unit'] }}</strong></p>
-                            <br>
-           
-                            {% for option in options['options'] %}
-                                <label class="payment-label">
-                                    <input type="radio" name="payment_option_{{ variation_id }}" value="{{ option['payment_optionsid'] }}" onchange="handlePaymentOptionSelection('{{ variation_id }}')">
-                                    {% if option['payment_method'] == 'Cash on Delivery' %}
-                                        <span class="payment-method">{{ option['payment_method'] }}</span>
-                                    {% elif option['payment_method'] != 'Cash on Delivery' %}
-                                        <span class="payment-method">{{ option['payment_method'] }},</span>
-                                        <span class="account-number">Account Number: {{ option['account_number'] }}</span>
-                                    {% endif %}
-                                </label>
-                                <br>
-                            {% endfor %}
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>            
-            <div class="line-container">
-                <hr class="custom-line">
-            </div>
-            <div class="buyer-details">
-                <div class="row">
-                    <div class="col1">
-                        <label for="shipping-address">Shipping Address:</label>
+                            </div>
+                        {% endfor %}
                     </div>
-                    <div class="col2">
+
+
+                    <hr class="custom-line">
+
+
+                    <div class="shipping-section">
+                        <label for="shipping-address">Shipping Address:</label>
                         <input type="text" id="shipping-address" name="shipping_address" required>
                     </div>
-                </div>
+
+
+                    <div class="total-payment-container">
+                        <h3>Total Payment: ₱{{ total_payment }}</h3>
+                    </div>
+
+
+                    <button class="checkout-btn" type="submit">Place Order</button>
+                {% elif message %}
+                    <p>{{ message }}</p>
+                {% endif %}
             </div>
-            <div class="total-payment-container">
-                <h2>Total Payment: ₱{{ total_payment }}</h2>
-            </div>
-            {% elif message %}
-                <p>{{ message }}</p>
-            {% endif %}
-            <button class="place-order-button" type="submit">Place Order</button>
-        </div>
         </form>
-    </div>
+    </section>
+</main>
+
+
     <script>
         var selectedPaymentOptions = {};
    
