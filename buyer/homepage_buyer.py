@@ -167,16 +167,20 @@ def to_pay_orders():
     order_type = 'to_pay'
     return render_template('buyer_order.html', order_details=order_details, order_type=order_type, categories=categories)
 
-@homepage_buyer_app.route('/pay-now/<order_id>', methods=['POST', 'GET'])
+from flask import redirect, url_for, request
+
+@homepage_buyer_app.route('/pay-now/<order_id>', methods=['POST'])
 def pay_now(order_id):
     user_id = session.get('user_id')
-   
-    order_details, categories = get_to_pay_orders_data(user_id)
 
+    order_details, categories = get_to_pay_orders_data(user_id)
+    
     try:
         with get_db_connection() as connection:
             cursor = connection.cursor()
 
+
+            # Update Buyer_Order status
             update_query = """
             UPDATE Buyer_Order
             SET Order_Status = 'pending', Shipping_Date = 'waiting for shipment'
@@ -185,6 +189,7 @@ def pay_now(order_id):
             cursor.execute(update_query, (user_id, order_id))
             connection.commit()
 
+            # Update Seller_Order status
             update_query = """
             UPDATE Seller_Order
             SET Order_Status = 'pending', Shipping_Date = 'waiting for shipment'
@@ -195,10 +200,10 @@ def pay_now(order_id):
 
     except mysql.connector.Error as err:
         print(f"Error: {err}")
-    
-    order_type = 'to_pay'
 
-    return render_template('buyer_order.html', order_details=order_details, order_type=order_type, categories=categories, refresh_page=True)
+    # Redirect to the order page with a flag to refresh
+    return redirect(url_for('homepage_buyer.to_pay_orders', order_type='to_pay', order_details=order_details, categories=categories, refresh_page='true'))
+
 
 @homepage_buyer_app.route('/to-ship-orders', methods=['POST','GET'])
 def to_ship_orders():
@@ -354,9 +359,10 @@ def order_received(order_id):
     except mysql.connector.Error as err:
         print(f"Error: {err}")
         
-    order_type = 'shipping'
+    
 
-    return render_template('buyer_order.html', order_details=order_details, order_type=order_type, categories=categories, refresh_page=True)
+    return redirect(url_for('homepage_buyer.shipping_orders', order_type='shipping', order_details=order_details, categories=categories, refresh_page='true'))
+
 
 @homepage_buyer_app.route('/delivered-orders', methods=['POST','GET'])
 def delivered_orders():
