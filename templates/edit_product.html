@@ -14,7 +14,7 @@
     <!-- Header -->
     <header class="top-bar">
         <div class="logo">
-            <img src="static/images/logo.png" alt="Agrimart Logo" class="logo-icon">
+            <img src="/static/images/logo.png" alt="Agrimart Logo" class="logo-icon">
             Agrimart
         </div>          
         <div class="tagline">Connecting you to Local Farmers</div>
@@ -41,17 +41,16 @@
 
 
         <div class="icons">
-            <div class="user-dropdown" id="userDropdown">
-                <span class="user" id="userIcon"><i class="fas fa-user"></i></span>
-                <div class="user-menu" id="userMenu">
-                    <a href="#">Profile</a>
-                    <a href="#">Settings</a>
-                    <form action="{{ url_for('homepage_seller.logout') }}" method="post">
-                        <button class="logout-btn" type="submit">Logout</button>
-                    </form>
-                </div>
-            </div>
+      <div class="user-dropdown" id="userDropdown">
+        <span class="user" id="userIcon"><i class="fas fa-user"></i></span>
+        <div class="user-menu" id="userMenu">
+          
+          <form action="{{ url_for('homepage_seller.logout') }}" method="post">
+            <button class="logout-btn" type="submit">Logout</button>
+          </form>
         </div>
+      </div>
+    </div>
     </nav>
 
 
@@ -133,6 +132,55 @@
                     </tbody>
                 </table>
 
+                
+
+
+                <div class="outer-container">
+    <h2>Variations</h2>
+        {% for variation in variations %}
+            <div class="variation-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><br></th>
+                            
+                        </tr>
+                    </thead>
+                     <tbody>
+                        <tr>
+                            <td><input type="hidden" name="existing_variations[]" value="{{ variation['VariationID'] }}">
+                            <label for="unit">Unit:</label>
+                            <input type="text" id="unit" name="unit[]" value="{{ variation['Unit'] }}">
+                            </td>
+                        <td>
+                        <label for="price">Price:</label>
+            
+                        <input type="text" id="price" name="price[]" value="{{ variation['Price'] }}">
+                        </td>
+                        <td>
+                        <label for="quantity">Quantity:</label>
+                    
+                        <input type="text" id="quantity" name="quantity[]" value="{{ variation['Quantity'] }}">
+                        </td>
+                
+                        <td>
+                        <label for="delete_variation"></label>
+                
+                        <input type="hidden" name="delete_variation[]" value="{{ variation['VariationID'] }}">
+                        <button type="submit" class="delete-variation-button" name="delete_variation_button_{{ variation['VariationID'] }}">Delete</button>
+                        </td>
+                        </tr>
+                     </tbody>
+                </table>
+                    
+            </div>
+        {% endfor %}
+
+
+
+
+
+
 
                 <!-- Container for new variations -->
                 <div id="new-variation-container"></div>
@@ -141,6 +189,7 @@
                 <button type="button" class="button1" onclick="addNewVariation()">Add New Variation</button>
                 <input type="submit" value="Update Product" class="button1">
             </div>
+            </div>  
         </form>
     </div>
 </div>
@@ -215,6 +264,7 @@
   </footer>
  
 <script>
+    
     function addNewVariation() {
     var container = document.getElementById('new-variation-container');
     var div = document.createElement('div');
@@ -284,7 +334,32 @@
     window.onload = calculateShippingFee;
 </script>
 
-
+<!-- JavaScript -->
+  <script>
+    document.querySelectorAll('.category-option input[type="radio"]').forEach(radio => {
+      radio.addEventListener('change', function () {
+        this.closest('form').submit();
+      });
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const userIcon = document.getElementById('userIcon');
+      const userMenu = document.getElementById('userMenu');
+ 
+      userIcon.addEventListener('click', function (event) {
+        userMenu.classList.toggle('show');
+        event.stopPropagation(); // Prevents event from bubbling up
+      });
+ 
+      // Close the dropdown if clicked outside
+      document.addEventListener('click', function (event) {
+        if (!userMenu.contains(event.target)) {
+          userMenu.classList.remove('show');
+        }
+      });
+    });
+  </script>
 </body>
 </html>
 
