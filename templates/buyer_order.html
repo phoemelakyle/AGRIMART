@@ -4,259 +4,311 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agrimart - Homepage</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/buyer_order.css') }}">
+    <link rel="stylesheet" type="text/css" href="../static/css/buyer_order.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage_buyer.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="banner">
-        <img src="{{ url_for('static', filename='images/header.png') }}" alt="LocaLister Banner Image">
-        <div class="buttons">
-            <form action="{{ url_for('homepage_buyer.logout') }}" method="post">
-                <button class="button-left">LOGOUT</button>
-            </form>
-            <a href="{{ url_for('cart.cart') }}" class="button-right">
-                <img src="{{ url_for('static', filename='images/cart.png') }}" alt="Cart Icon">
+
+
+    <header class="top-bar">
+        <div class="logo">
+          <img src="static/images/logo.png" alt="Agrimart Logo" class="logo-icon" />
+          Agrimart
+        </div>
+        <div class="tagline">Connecting you to Local Farmers</div>
+      </header>
+   
+      <!-- Navigation Menu -->
+      <nav class="nav-menu">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </nav>
+   
+      <!-- Breadcrumb Navigation -->
+      <nav class="main-nav">
+        <ul class="breadcrumb">
+          <li><a href="/index"><i class="fas fa-home"></i></a></li>
+          <li>›</li>
+          <li><a href="/homepage_buyer" class="button">Homepage</a></li>
+        </ul>
+        <div class="icons">
+          <span class="cart">
+            <a href="{{ url_for('cart.cart') }}" class="cart-link">
+              <i class="fas fa-shopping-cart"></i>
+              <span class="badge">2</span>
             </a>
+          </span>
+          <div class="user-dropdown" id="userDropdown">
+            <span class="user" id="userIcon"><i class="fas fa-user"></i></span>
+            <div class="user-menu" id="userMenu">
+              <a href="#">Profile</a>
+              <a href="#">Settings</a>
+              <form action="{{ url_for('homepage_buyer.logout') }}" method="post">
+                <button class="logout-btn" type="submit">Logout</button>
+              </form>
+            </div>
+          </div>
         </div>
-    </div>
-
-
-    <div class="content">
-       <div class="side">
-        <h2>FILTERS</h2>
-        <div class="column column-left">
-            <form action="{{ url_for('homepage_buyer.filter_products', category_name='all') }}"  method="get">
-          <button type="submit" class="filter-button" name="selected_category" value="all">All Products</button>
-            </form>
-        {% for category in categories %}
-            <form action="{{ url_for('homepage_buyer.filter_products', category_name=category.Category_Name) }}" method="get">
-                <button type="submit" class="filter-button" name="selected_category" value="{{ category.CategoryID }}">{{ category.Category_Name }}</button>
-            </form>
-        {% endfor %}
-        </div>
-        <div class="status">
-            <h3>STATUS</h3>
-            <form action="{{ url_for('homepage_buyer.to_pay_orders') }}" method="get">
-                <button type="submit" class="stat-button" name="selected_status" value="TO_PAY">TO PAY</button>
-            </form>
-            <form action="{{ url_for('homepage_buyer.to_ship_orders') }}" method="get">
-                <button type="submit" class="stat-button" name="selected_status" value="TO_SHIP">TO SHIP</button>
-            </form>
-            <form action="{{ url_for('homepage_buyer.shipping_orders') }}" method="get">
-                <button type="submit" class="stat-button" name="selected_status" value="SHIPPING">SHIPPING</button>
-            </form>
-            <form action="{{ url_for('homepage_buyer.delivered_orders') }}" method="get">
-                <button type="submit" class="stat-button" name="selected_status" value="DELIVERED">DELIVERED</button>
-            </form>
-            <form action="{{ url_for('homepage_buyer.cancelled_orders') }}" method="get">
-                <button type="submit" class="stat-button" name="selected_status" value="CANCELLED">CANCELLED</button>
-            </form>
-       </div>
-        </div>
-</div>
-
-<div class="column column-right">
-    <div class="order-detail">
-        <div class="content">
-            <h1>
-                {% if order_type == 'to_pay' %}
-                    TO PAY
-                {% elif order_type == 'to_ship' %}
-                    TO SHIP
-                <div class="note"> Note: Once your order is in the shipping process, cancellation is not possible. </div>
-                {% elif order_type == 'shipping' %}
-                    SHIPPING
-                {% elif order_type == 'cancelled' %}
-                    CANCELLED
-                {% elif order_type == 'delivered' %}
-                    DELIVERED
+      </nav>
+   
+      <!-- Main Layout -->
+      <div class="container">
+        <!-- Sidebar (Left) -->
+        <aside class="sidebar">
+          <!-- Category Section -->
+          <div class="category-filter">
+            <h3>CATEGORIES</h3>
+            <ul class="category-list">
+              <li>
+                <form action="{{ url_for('homepage_buyer.filter_products', category_name='all') }}" method="get">
+                  <button type="submit" class="category-item {% if selected_category == 'all' %}active{% endif %}">All Products</button>
+                </form>
+              </li>
+              {% for category in categories %}
+              <li>
+                <form action="{{ url_for('homepage_buyer.filter_products', category_name=category.Category_Name) }}" method="get">
+                  <button type="submit" class="category-item {% if selected_category == category.CategoryID %}active{% endif %}">{{ category.Category_Name }}</button>
+                </form>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+   
+          <!-- Buyer Menu -->
+          <div class="status">
+            <h3>BUYER MENU</h3>
+            <ul class="status-list">
+              <li>
+                <form action="/homepage_buyer" method="get">
+                  <button type="submit" class="status-item"><i class="fas fa-home"></i> Homepage</button>
+                </form>
+              </li>
+              <li>
+                <form action="{{ url_for('homepage_buyer.to_pay_orders') }}" method="get">
+                  <button type="submit" class="status-item"><i class="fas fa-receipt"></i> Orders</button>
+                </form>
+              </li>
+            </ul>
+          </div>
+        </aside>
+   
+        <!-- Content Area (Right) -->
+        <div class="column-right">
+            <div class="status-container">
+              <h3>STATUS</h3>
+              <div class="status-tracker">
+                {% for status, icon in [('to_pay', 'wallet'), ('to_ship', 'box'), ('shipping', 'truck'), ('delivered', 'check-circle'), ('cancelled', 'times-circle')] %}
+                <form action="{{ url_for('homepage_buyer.' + status + '_orders') }}" method="get" class="step">
+                  <button type="submit" class="circle {% if order_type == status %}active-status{% endif %}">
+                    <i class="fas fa-{{ icon }}"></i>
+                  </button>
+                  <p>{{ status.replace('_', ' ').title() }}</p>
+                </form>
+                {% endfor %}
+              </div>
+            </div>
+         
+            <div class="product-info">
+              <h1>
+                {% if order_type == 'to_pay' %} TO PAY
+                {% elif order_type == 'to_ship' %} TO SHIP
+                  <div class="note">Note: Once your order is in the shipping process, cancellation is not possible.</div>
+                {% elif order_type == 'shipping' %} SHIPPING
+                {% elif order_type == 'delivered' %} DELIVERED
+                {% elif order_type == 'cancelled' %} CANCELLED
                 {% endif %}
-                :
-            </h1>
-        </div>
-</div>
-
-
-            {% if order_type == 'to_pay' %}
-            {% if order_details %}
-            {% for order_detail in order_details %}
-             <div class="orders">
-            <div class="order-item">
-                <div class="order-pic">
-                    <img src="{{ url_for('static', filename='images/products/' + order_detail['ImageFileName']) }}" alt="{{ order_detail['Product_Name'] }}" width="200" height="200">
-                </div>
+              </h1>
+         
+              {% if order_details %}
+              <table class="variation-table">
+                <thead>
+                  <tr>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Variation</th>
+                    <th>Price</th>
+                    <th>Shipping</th>
+                    <th>Total</th>
+                    <th>Address</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for order_detail in order_details %}
+                  <tr>
+                    <td>
+                      <img src="{{ url_for('static', filename='images/products/' + order_detail['ImageFileName']) }}"
+                        alt="{{ order_detail['Product_Name'] }}" class="order-thumb">
+                    </td>
+                    <td>{{ order_detail['Product_Name'] }}</td>
+                    <td>x{{ order_detail['Quantity'] }}</td>
+                    <td>{{ order_detail['Unit'] }}</td>
+                    <td>P{{ order_detail['Price'] }}</td>
+                    <td>P{{ order_detail['Shipping_Fee'] }}</td>
+                    <td>P{{ order_detail['Total_Amount'] }}</td>
+                    <td>{{ order_detail['Shipping_Address'] }}</td>
+                    <td>
+                      {% if order_type == 'to_pay' %}
+                      <span class="status to-pay">To Pay</span>
+                      {% elif order_type == 'to_ship' %}
+                      <span class="status to-ship">To Ship</span>
+                      {% elif order_type == 'shipping' %}
+                      <span class="status shipping">Shipping</span>
+                      {% elif order_type == 'delivered' %}
+                      <span class="status delivered">Delivered</span>
+                      {% elif order_type == 'cancelled' %}
+                      <span class="status cancelled">Cancelled</span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if order_type == 'to_pay' %}
+                      <form action="{{ url_for('homepage_buyer.pay_now', order_id=order_detail['OrderID']) }}" method="post">
+                        <button type="submit" class="button1">Pay Now</button>
+                      </form>
+                      <form action="{{ url_for('homepage_buyer.cancel_to_pay', order_id=order_detail['OrderID']) }}" method="post">
+                        <button type="submit" class="button1 cancel-btn">Cancel Order</button>
+                      </form>
+                      {% elif order_type == 'to_ship' %}
+                      <form action="{{ url_for('homepage_buyer.cancel_to_ship', order_id=order_detail['OrderID']) }}" method="post">
+                        <button type="submit" class="button1 cancel-btn">Cancel Order</button>
+                      </form>
+                      {% elif order_type == 'shipping' %}
+                      <form action="{{ url_for('homepage_buyer.order_received', order_id=order_detail['OrderID']) }}" method="post">
+                        <button type="submit" class="button1">Order Received</button>
+                      </form>
+                      {% elif order_type == 'delivered' %}
+                      <p class="order-completed">Order completed.</p>
+                      {% elif order_type == 'cancelled' %}
+                      <p class="order-cancelled">Order Cancelled</p>
+                      {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              {% else %}
+              <p class="no-orders-msg">No orders yet! Place an order now!</p>
+              {% endif %}
             </div>
-            <div class="order-details">
-                
-                    <p class="product-name">{{ order_detail['Product_Name'] }}</p>
-                    <p class="quantity"><strong>x</strong>{{ order_detail['Quantity'] }}</p>
-                    <p class="variation"><strong>Variation:</strong> {{ order_detail['Unit'] }}</p>
-                    <p class="price" style="color: black;"><strong>Price:</strong> P{{ order_detail['Price'] }}, <strong>Shipping Fee:</strong> P{{ order_detail['Shipping_Fee'] }}</p>    
-                    <p class="Total"><strong>Total:</strong> P{{ order_detail['Total_Amount'] }}</p>
-                     <div class="shipping"><strong>Shipping Address:</strong> {{ order_detail['Shipping_Address'] }}</div>   
-                     <form action="{{ url_for('homepage_buyer.pay_now', order_id=order_detail['OrderID']) }}" method="post">
-                        <button type="submit" class="pay-now-button">PAY NOW</button>
-                    </form>
-                    <div class="cancel">
-            </form>
-            <form action="{{ url_for('homepage_buyer.cancel_to_pay', order_id=order_detail['OrderID']) }}" method="post">
-                <button type="submit" class="cancel-order-button">CANCEL ORDER</button>
-            </form>
-        </div>
-            </div>
-             </div>
-        {% endfor %}
-        {% else %}
-        <p>No orders yet! Place an order now!</p>
-        {% endif %}
-
-
-<div>
-        
-        {% elif order_type == 'to_ship' %}
-        {% if order_details %}
-        {% for order_detail in order_details %}
-        <div class="orders">
-        <div class="order-item">
-            <div class="order-pic">
-                <img src="{{ url_for('static', filename='images/products/' + order_detail['ImageFileName']) }}" alt="{{ order_detail['Product_Name'] }}" width="200" height="200">
-            </div>
-        </div>
-        <div class="order-details">
-                            
-            <p class="product-name">{{ order_detail['Product_Name'] }}</p>
-            <p class="quantity"><strong>x</strong>{{ order_detail['Quantity'] }}</p>
-            <p class="variation"><strong>Variation:</strong> {{ order_detail['Unit'] }}</p>
-            <p class="price" style="color: black;"><strong>Price:</strong> P{{ order_detail['Price'] }}, <strong>Shipping Fee:</strong> P{{ order_detail['Shipping_Fee'] }}</p>    
-            <p class="Total"><strong>Total:</strong> P{{ order_detail['Total_Amount'] }}</p>
-             <div class="shipping"><strong>Shipping Address:</strong> {{ order_detail['Shipping_Address'] }}</div>
-            <p class="statuss"><strong>to ship<strong></p>
-                <div class="cancel">
-            <form action="{{ url_for('homepage_buyer.cancel_to_ship', order_id=order_detail['OrderID']) }}" method="post">
-                <button type="submit" class="cancel-order-button">CANCEL ORDER</button>
-            </form>  
-        </div>
-</div>
-</div>
-        {% endfor %}
-        {% else %}
-        <p>No orders yet! Place an order now!</p>
-        {% endif %}
-
-        
-<div>
-
-        {% elif order_type == 'shipping' %}
-        {% if order_details %}
-        {% for order_detail in order_details %}
-        <div class="orders">
-        <div class="order-item">
-            <div class="order-pic">
-                <img src="{{ url_for('static', filename='images/products/' + order_detail['ImageFileName']) }}" alt="{{ order_detail['Product_Name'] }}" width="200" height="200">
-            </div>
-        </div>
-
-        <div class="order-details">
-                            
-            <p class="product-name">{{ order_detail['Product_Name'] }}</p>
-            <p class="quantity"><strong>x</strong>{{ order_detail['Quantity'] }}</p>
-            <p class="variation"><strong>Variation:</strong> {{ order_detail['Unit'] }}</p>
-            <p class="price" style="color: black;"><strong>Price:</strong> P{{ order_detail['Price'] }}, <strong>Shipping Fee:</strong> P{{ order_detail['Shipping_Fee'] }}</p>    
-            <p class="Total"><strong>Total:</strong> P{{ order_detail['Total_Amount'] }}</p>
-             <div class="shipping"><strong>Shipping Address:</strong> {{ order_detail['Shipping_Address'] }}</div>
-            <p class="statuss"><strong>Ship Date:</strong>{{ order_detail['Shipping_Date'] }}</p>
-            <div class="cancel">
-            <form action="{{ url_for('homepage_buyer.order_received', order_id=order_detail['OrderID']) }}" method="post">
-                <button type="submit" class="ship-now-button">ORDER RECEIVED</button>
-            </form>
-        </div>
-        </div>
-</div>
-        {% endfor %}
-        {% else %}
-        <p>No orders yet! Place an order now!</p>
-        {% endif %}
-
-
-
-        <div>
-        {% elif order_type == 'delivered' %}
-        {% if order_details %}
-        {% for order_detail in order_details %}
-        <div class="orders">
-        <div class="order-item">
-            <div class="order-pic">
-                <img src="{{ url_for('static', filename='images/products/' + order_detail['ImageFileName']) }}" alt="{{ order_detail['Product_Name'] }}" width="200" height="200">
-            </div>
-        </div>
-        <div class="order-details">
-                            
-            <p class="product-name">{{ order_detail['Product_Name'] }}</p>
-            <p class="quantity"><strong>x</strong>{{ order_detail['Quantity'] }}</p>
-            <p class="variation"><strong>Variation:</strong> {{ order_detail['Unit'] }}</p>
-            <p class="price" style="color: black;"><strong>Price:</strong> P{{ order_detail['Price'] }}, <strong>Shipping Fee:</strong> P{{ order_detail['Shipping_Fee'] }}</p>    
-            <p class="Total"><strong>Total:</strong> P{{ order_detail['Total_Amount'] }}</p>
-             <div class="shipping"><strong>Shipping Address:</strong> {{ order_detail['Shipping_Address'] }}</div>
-            <p class="statuss"><strong>Ship Date:</strong>{{ order_detail['Shipping_Date'] }}</p>
-            <div class="cancel">
-                <p class="order-completed">Order completed.</p>
-        </div>
-        </div>
-</div>
-        {% endfor %}
-        {% else %}
-        <p>No orders yet! Place an order now!</p>
-        {% endif %}
-
-
-
-        <div>
-        {% elif order_type == 'cancelled' %}
-        {% if order_details %}
-        {% for order_detail in order_details %}
-        <div class="orders">
-        <div class="order-item">
-            <div class="order-pic">
-                <img src="{{ url_for('static', filename='images/products/' + order_detail['ImageFileName']) }}" alt="{{ order_detail['Product_Name'] }}" width="200" height="200">
-            </div>
-        </div>
-
-        <div class="order-details">
-            <div>        
-            <p class="product-name">{{ order_detail['Product_Name'] }}</p>
-            <p class="quantity"><strong>x</strong>{{ order_detail['Quantity'] }}</p>
-            <p class="variation"><strong>Variation:</strong> {{ order_detail['Unit'] }}</p>
-            <p class="price" style="color: black;"><strong>Price:</strong> P{{ order_detail['Price'] }}, <strong>Shipping Fee:</strong> P{{ order_detail['Shipping_Fee'] }}</p>    
-            <p class="Total"><strong>Total:</strong> P{{ order_detail['Total_Amount'] }}</p>
-             <div class="shipping"><strong>Shipping Address:</strong> {{ order_detail['Shipping_Address'] }}</div>
-             <p class="statuss"><strong>Order cancelled.</strong></p>
-        </div>
-        </div>
-        </div>
-        {% endfor %}
-        {% else %}
-        <p>No orders yet! Place an order now!</p>
-        {% endif %}
-</div>
-        {% endif %}
+          </div>
+      </div>
+         
+      <!-- Newsletter -->
+<section class="newsletter">
+    <div class="newsletter-content">
+      <div class="newsletter-text">
+        <h3><i class="fas fa-envelope"></i> Subscribe to our Newsletter</h3>
+        <p>Stay connected with the latest updates and local farm offers.</p>
+      </div>
+      <form class="newsletter-form">
+        <input type="email" placeholder="Your email address" required />
+        <button type="submit">Subscribe</button>
+      </form>
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+      </div>
     </div>
-</div>
-</div>
+  </section>
+ 
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="footer-content">
+      <div class="footer-about">
+        <img src="static/images/logo.png" alt="Agrimart Logo" class="logo-icon">
+        Agrimart
+        <p>Empowering farmers and connecting communities through sustainable commerce.</p>
+        <p><strong>09271674524</strong><br />agrimart@.com</p>
+      </div>
+      <div class="footer-columns">
+        <div>
+          <h5>My Account</h5>
+          <ul>
+            <li>My Account</li>
+            <li>Order History</li>
+            <li>Shopping Cart</li>
+            <li>Wishlist</li>
+          </ul>
+        </div>
+        <div>
+          <h5>Help</h5>
+          <ul>
+            <li>Contact</li>
+            <li>FAQs</li>
+            <li>Terms & Conditions</li>
+            <li>Privacy Policy</li>
+          </ul>
+        </div>
+        <div>
+          <h5>Proxy</h5>
+          <ul>
+            <li>About</li>
+            <li>Shop</li>
+            <li>Product</li>
+            <li>Track Order</li>
+          </ul>
+        </div>
+        <div>
+          <h5>Categories</h5>
+          <ul>
+            <li>Order History</li>
+            <li>Shopping Cart</li>
+            <li>Wishlist</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+ 
+  <!-- Scripts -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const userIcon = document.getElementById('userIcon');
+      const userMenu = document.getElementById('userMenu');
+ 
+      userIcon.addEventListener('click', function (event) {
+        userMenu.classList.toggle('show');
+        event.stopPropagation();
+      });
+ 
+      document.addEventListener('click', function (event) {
+        if (!userMenu.contains(event.target)) {
+          userMenu.classList.remove('show');
+        }
+      });
+ 
+      const refreshPageValue = "{{ refresh_page }}";
+  if (refreshPageValue === 'True' && !sessionStorage.getItem('hasReloaded')) {
+    sessionStorage.setItem('hasReloaded', 'true');
+    window.location.reload();
+  } else {
+    sessionStorage.removeItem('hasReloaded');
+  }
+    });
+  </script>
 
-<script>
-console.log('Script loaded');
 
-(function() {
-    var refreshPageValue = "{{ refresh_page }}";
-
-    if (refreshPageValue === 'True' && !sessionStorage.hasReloaded) {
-        console.log('Reloading page...');
-        window.location.reload();
-        sessionStorage.hasReloaded = true;
-    } else {
-
-        sessionStorage.removeItem('hasReloaded');
-    }
-})();
-</script>
-</body>
-</html>
+      <!-- Reload Script -->
+      <script>
+        console.log('Script loaded');
+        (function () {
+          var refreshPageValue = "{{ refresh_page }}";
+          if (refreshPageValue === 'True' && !sessionStorage.hasReloaded) {
+            console.log('Reloading page...');
+            window.location.reload();
+            sessionStorage.hasReloaded = true;
+          } else {
+            sessionStorage.removeItem('hasReloaded');
+          }
+        })();
+      </script>
+     
+    </body>
+    </html>
