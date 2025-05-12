@@ -116,13 +116,19 @@
               <h1>
                 {% if order_type == 'to_pay' %} TO PAY
                 {% elif order_type == 'to_ship' %} TO SHIP
-                  <div class="note">Note: Once your order is in the shipping process, cancellation is not possible.</div>
+                  <div class="note">Note: Once your order is in the shipping process, <span style="color: red;">cancellation</span> is not possible.</div>
                 {% elif order_type == 'shipping' %} SHIPPING
                 {% elif order_type == 'delivered' %} DELIVERED
                 {% elif order_type == 'cancelled' %} CANCELLED
                 {% endif %}
               </h1>
-         
+                <form method="get" action="{{ url_for('homepage_buyer.' + order_type + '_orders') }}" class="sort-form">
+                <label for="sort">Sort by:</label>
+                  <select name="sort" id="sort" onchange="this.form.submit()">
+                    <option value="recent" {% if request.args.get('sort') == 'recent' %}selected{% endif %}>Recent</option>
+                    <option value="old" {% if request.args.get('sort') == 'old' %}selected{% endif %}>Old</option>
+                  </select>
+                </form>
               {% if order_details %}
               <table class="variation-table">
                 <thead>
@@ -143,6 +149,7 @@
                   {% for order_detail in order_details %}
                   <tr>
                     <td>
+                      
                       <img src="{{ url_for('static', filename='images/products/' + order_detail['ImageFileName']) }}"
                         alt="{{ order_detail['Product_Name'] }}" class="order-thumb">
                     </td>
@@ -153,6 +160,7 @@
                     <td>P{{ order_detail['Shipping_Fee'] }}</td>
                     <td>P{{ order_detail['Total_Amount'] }}</td>
                     <td>{{ order_detail['Shipping_Address'] }}</td>
+                    
                     <td>
                       {% if order_type == 'to_pay' %}
                       <span class="status to-pay">To Pay</span>
@@ -189,9 +197,14 @@
                       {% endif %}
                     </td>
                   </tr>
+                  <tr>
+                    <td colspan="10" id="var-date"><b>Order Date & Time: </b>{{ order_detail['Order_Date'] }}</td>
+                  </tr>
+                  
                   {% endfor %}
                 </tbody>
               </table>
+              
               {% else %}
               <p class="no-orders-msg">No orders yet! Place an order now!</p>
               {% endif %}

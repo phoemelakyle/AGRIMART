@@ -437,6 +437,10 @@ body {
       text-align: center;
       vertical-align: middle;
     }
+
+    #var-date {
+      text-align: left;
+    }
    
     .variation-table th {
       font-weight: 600;
@@ -516,7 +520,41 @@ body {
     color: #999;
   }
  
+
+  .sort-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
+  font-family: Arial, sans-serif;
+}
+
+.sort-form label {
+  font-weight: bold;
+  color: #333;
+}
+
+.sort-form select {
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: border 0.3s;
+}
+
+.sort-form select:hover,
+.sort-form select:focus {
+  border-color: #888;
+  outline: none;
+}
    
+
+.note {
+  padding-top: 5px;
+  font-size: 20px;
+}
    
 
 
