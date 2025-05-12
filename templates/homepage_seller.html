@@ -4,11 +4,13 @@
     <link rel="stylesheet" type="text/css" href="../static/css/homepage_seller.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
     <title>Agrimart - Homepage</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage_buyer.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <body>
-  
+ 
     <!-- Header -->
     <header class="top-bar">
       <div class="logo">
@@ -17,28 +19,27 @@
       </div>          
       <div class="tagline">Connecting you to Local Farmers</div>
     </header>
-  
+ 
     <!-- Navigation Menu -->
     <nav class="nav-menu">
       <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Contact Us</a></li>
+        <li><a href="/homepage_seller">Home</a></li>
+        <li><a href="#contacts">Contacts</a></li>
       </ul>
     </nav>
-    
+   
     <!-- Breadcrumb Navigation -->
   <nav class="main-nav">
     <ul class="breadcrumb">
-      <li><a href="/index"><i class="fas fa-home"></i></a></li>
+      <li><a href="/homepage_seller"> <i class="fas fa-home"></i></a></li>
       <li>›</li>
       <li>
         <a href="/homepage_seller" class="button">Homepage Seller</a>
       </li>
-      
-        
+     
+       
     </ul>
-    
+   
     <div class="icons">
       <div class="user-dropdown" id="userDropdown">
         <span class="user" id="userIcon"><i class="fas fa-user"></i></span>
@@ -52,7 +53,7 @@
       </div>
     </div>
   </nav>
-  
+ 
 <div class="container">
   <aside class="sidebar">
   <div class="status">
@@ -89,7 +90,7 @@
     </ul>
   </div>
   </aside>
-  
+ 
  <!-- Product Column -->
 <div class="column-right">
     <div class="product-container">
@@ -117,7 +118,7 @@
   </div>
 </div>
     <!-- Newsletter -->
- <section class="newsletter">
+ <section id="contacts" class="newsletter">
     <div class="newsletter-content">
       <div class="newsletter-text">
         <h3><i class="fas fa-envelope"></i> Subscribe to our Newsletter</h3>
@@ -134,14 +135,14 @@
       </div>
     </div>
   </section>
-  
+ 
   <!-- Footer -->
   <footer class="main-footer">
     <div class="footer-content">
       <div class="footer-about">
         <img src="static/images/logo.png" alt="Agrimart Logo" class="logo-icon">
         Agrimart
-    
+   
         <p>Empowering farmers and connecting communities through sustainable commerce.</p>
         <p><strong>09271674524</strong><br />agrimart@.com</p>
       </div>
@@ -184,7 +185,7 @@
       </div>
     </div>
   </footer>
-  
+ 
     <!-- JavaScript -->
     <script>
       document.querySelectorAll('.category-option input[type="radio"]').forEach(radio => {
@@ -197,12 +198,12 @@
       document.addEventListener('DOMContentLoaded', function () {
         const userIcon = document.getElementById('userIcon');
         const userMenu = document.getElementById('userMenu');
-    
+   
         userIcon.addEventListener('click', function (event) {
           userMenu.classList.toggle('show');
           event.stopPropagation(); // Prevents event from bubbling up
         });
-    
+   
         // Close the dropdown if clicked outside
         document.addEventListener('click', function (event) {
           if (!userMenu.contains(event.target)) {
@@ -211,8 +212,8 @@
         });
       });
     </script>
-  
-    
+ 
+   
   </body>
   </html>
-  
+ 
