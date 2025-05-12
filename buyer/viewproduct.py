@@ -24,8 +24,11 @@ def viewproduct(product_id):
     with get_db_connection() as connection:
         cursor = connection.cursor(dictionary=True)
 
+        print("Product IDviewproductapp:")
+        print(product_id)
+
         query = f"""
-        SELECT p.ProductID, p.Product_Name, p.CategoryID, pv.Price, p.ImageFileName, pv.Color, pv.Size, pv.Quantity
+        SELECT p.ProductID, p.Product_Name, p.CategoryID, pv.Price, p.ImageFileName, pv.Unit, pv.Quantity
         FROM product p
         JOIN product_variation pv ON p.ProductID = pv.ProductID
         WHERE p.ProductID = '{product_id}'
@@ -36,21 +39,15 @@ def viewproduct(product_id):
         if not product_data:
             return "Product not found", 404
 
-        colors_query = f"""
-        SELECT DISTINCT Color
+        units_query = f"""
+        SELECT DISTINCT Unit
         FROM product_variation
         WHERE ProductID = '{product_id}'
         """
-        cursor.execute(colors_query)
-        colors = [row['Color'] for row in cursor.fetchall()]
+        cursor.execute(units_query)
+        units = [row['Unit'] for row in cursor.fetchall()]
 
-        sizes_query = f"""
-        SELECT DISTINCT Size
-        FROM product_variation
-        WHERE ProductID = '{product_id}'
-        """
-        cursor.execute(sizes_query)
-        sizes = [row['Size'] for row in cursor.fetchall()]
+        
 
         quantities_query = f"""
         SELECT DISTINCT Quantity
@@ -77,8 +74,7 @@ def viewproduct(product_id):
                                          'Product_Name': product['Product_Name'],
                                          'ImageFileName': product['ImageFileName'],
                                          'Prices': prices,
-                                         'Colors': colors,
-                                         'Sizes': sizes,
+                                         'Units': units,
                                          'Quantities': quantities}
             else:
                 if product['Price'] not in grouped_products[key]['Prices']:
@@ -102,10 +98,9 @@ def viewproduct(product_id):
 @viewproduct_app.route('/api/view-product-variation', methods=['POST'])
 def viewprovar():
     data = request.json
-    selected_color = data.get('color')
-    selected_size = data.get('size')
+    selected_unit = data.get('unit')
 
-    query = f"SELECT Price, Quantity FROM product_variation WHERE Color = '{selected_color}' AND Size = '{selected_size}'"
+    query = f"SELECT Price, Quantity FROM product_variation WHERE Unit = '{selected_unit}'"
    
     with get_db_connection() as connection:
         cursor = connection.cursor()
@@ -113,8 +108,7 @@ def viewprovar():
         result = cursor.fetchone()
 
     response = {
-    'color': selected_color,
-    'size': selected_size,
+    'unit': selected_unit,
     'price': result[0] if result else None,
     'quantity': result[1] if result else None
     }
@@ -170,21 +164,19 @@ def add_to_cart_quan():
 
     return jsonify(response_data)
 
-@viewproduct_app.route('/api/pro-var-size-color', methods=['GET','POST'])
+@viewproduct_app.route('/api/pro-var-unit', methods=['GET','POST'])
 def view_product_variation():
     data = request.get_json()
-    color_var = data.get('color')
-    size_var = data.get('size')
+    unit_var = data.get('unit')
 
-    print(color_var)
-    print(size_var)
-
+    print(unit_var)
+    
     connection = get_db_connection()
 
     if connection:
         try:
             cursor = connection.cursor(dictionary=True)
-            query = f"SELECT VariationID FROM product_variation WHERE Color = '{color_var}' AND Size = '{size_var}'"
+            query = f"SELECT VariationID FROM product_variation WHERE Unit = '{unit_var}'"
             cursor.execute(query)
             product_variation_info = cursor.fetchone()
             print(product_variation_info)

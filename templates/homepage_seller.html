@@ -96,7 +96,7 @@
       {% for product in products %}
       <div class="product-box">
         <div class="image-container">
-          <a href="{{ url_for('viewproduct.viewproduct', product_id=product['ProductID']) }}">
+          <a href="{{ url_for('homepage_seller.edit_product', product_id=product['ProductID']) }}">
             <img src="{{ url_for('static', filename='images/products/' + product['ImageFilename']) }}" alt="Product Image">
           </a>
         </div>

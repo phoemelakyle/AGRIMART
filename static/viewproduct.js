@@ -1,29 +1,23 @@
 var newQuantity = 1;
 document.addEventListener('DOMContentLoaded', function () {
 
-    var colorButtons = document.querySelectorAll('.color-button');
-    var sizeButtons = document.querySelectorAll('.size-button');
+    var unitButtons = document.querySelectorAll('.unit-button');
+    
     var priceButtons = document.querySelectorAll('.price-button');
     var addToCartButton = document.querySelector('.btn-addtocart');
    
-    var selectedColor = null;
+    var selectedUnit = null;
     var selectedSize = null;
     var response = null;
-    colorButtons.forEach(function (colorButton) {
-        colorButton.addEventListener('click', function () {
-            selectedColor = this.getAttribute('data-color');
-            updateSelected(this, colorButtons);
+    unitButtons.forEach(function (unitButton) {
+        unitButton.addEventListener('click', function () {
+            selectedUnit = this.getAttribute('data-unit');
+            updateSelected(this, unitButtons);
             updateProductInfo();
         });
     });
 
-    sizeButtons.forEach(function (sizeButton) {
-        sizeButton.addEventListener('click', function () {
-            selectedSize = this.getAttribute('data-size');
-            updateSelected(this, sizeButtons);
-            updateProductInfo();
-        });
-    });
+    
 
     function updateSelected(clickedButton, allButtons) {
         allButtons.forEach(function (button) {
@@ -34,18 +28,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateProductInfo() {
-        if (selectedColor && selectedSize) {
-            console.log('Selected Color:', selectedColor);
-            console.log('Selected Size:', selectedSize);
+        if (selectedUnit) {
+            console.log('Selected Unit:', selectedUnit);
+           
 
-            fetch('/api/pro-var-size-color', {
+            fetch('/api/pro-var-unit', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    color: selectedColor,
-                    size: selectedSize,
+                    unit: selectedUnit,
                 }),
             })
             .then(response => response.json())
@@ -69,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     priceButtons.forEach(function (button) {
                         button.classList.remove('unclickable');
                     });
-                    throw new Error('Error fetching /api/pro-var-size-color');
+                    throw new Error('Error fetching /api/pro-var-unit');
                 }
             })
             .catch(error => {
@@ -81,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     button.classList.add('unclickable');
                 });
    
-                sendToServer(selectedColor, selectedSize);
+                sendToServer(selectedUnit);
    
                 fetch('/api/insert-into-cart', {
                     method: 'POST',
@@ -108,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
    
-    function sendToServer(color, size) {
+    function sendToServer(unit) {
         var xhr = new XMLHttpRequest();
         var url = '/api/view-product-variation';
 
@@ -140,8 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         var data = JSON.stringify({
-            color: color,
-            size: size
+            unit: unit
         });
 
         xhr.send(data);

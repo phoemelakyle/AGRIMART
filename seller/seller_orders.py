@@ -42,7 +42,7 @@ def get_unpaid_orders_data(user_id):
                 product_info = cursor.fetchone()
 
                 query_variation = """
-                SELECT Color, Size, Price
+                SELECT Unit, Price
                 FROM Product_Variation
                 WHERE VariationID = %s
                 """
@@ -53,8 +53,7 @@ def get_unpaid_orders_data(user_id):
                     'ImageFileName': product_info['ImageFileName'],
                     'Product_Name': product_info['Product_Name'],
                     'Shipping_Fee': product_info['Shipping_Fee'],
-                    'Color': variation_info['Color'],
-                    'Size': variation_info['Size'],
+                    'Unit': variation_info['Unit'],
                     'Quantity': order['Quantity'],
                     'OrderID': order['OrderID'],
                     'Price': variation_info['Price'],
@@ -104,7 +103,7 @@ def get_to_ship_orders_data(user_id):
                 product_info = cursor.fetchone()
 
                 query_variation = """
-                SELECT Color, Size, Price
+                SELECT Unit, Price
                 FROM Product_Variation
                 WHERE VariationID = %s
                 """
@@ -115,8 +114,7 @@ def get_to_ship_orders_data(user_id):
                     'ImageFileName': product_info['ImageFileName'],
                     'Product_Name': product_info['Product_Name'],
                     'Shipping_Fee': product_info['Shipping_Fee'],
-                    'Color': variation_info['Color'],
-                    'Size': variation_info['Size'],
+                    'Unit': variation_info['Unit'],
                     'Quantity': order['Quantity'],
                     'OrderID': order['OrderID'],
                     'Price': variation_info['Price'],
@@ -168,7 +166,7 @@ def shipping_orders():
                 product_info = cursor.fetchone()
 
                 query_variation = """
-                SELECT Color, Size, Price
+                SELECT Unit, Price
                 FROM Product_Variation
                 WHERE VariationID = %s
                 """
@@ -179,8 +177,7 @@ def shipping_orders():
                     'ImageFileName': product_info['ImageFileName'],
                     'Product_Name': product_info['Product_Name'],
                     'Shipping_Fee': product_info['Shipping_Fee'],
-                    'Color': variation_info['Color'],
-                    'Size': variation_info['Size'],
+                    'Unit': variation_info['Unit'],
                     'Quantity': order['Quantity'],
                     'OrderID': order['OrderID'],
                     'Price': variation_info['Price'],
@@ -226,7 +223,7 @@ def delivered_orders():
                 product_info = cursor.fetchone()
 
                 query_variation = """
-                SELECT Color, Size, Price
+                SELECT Unit, Price
                 FROM Product_Variation
                 WHERE VariationID = %s
                 """
@@ -237,8 +234,7 @@ def delivered_orders():
                     'ImageFileName': product_info['ImageFileName'],
                     'Product_Name': product_info['Product_Name'],
                     'Shipping_Fee': product_info['Shipping_Fee'],
-                    'Color': variation_info['Color'],
-                    'Size': variation_info['Size'],
+                    'Unit': variation_info['Unit'],
                     'Quantity': order['Quantity'],
                     'OrderID': order['OrderID'],
                     'Price': variation_info['Price'],
@@ -284,7 +280,7 @@ def cancelled_orders():
                 product_info = cursor.fetchone()
 
                 query_variation = """
-                SELECT Color, Size, Price
+                SELECT Unit, Price
                 FROM Product_Variation
                 WHERE VariationID = %s
                 """
@@ -295,8 +291,7 @@ def cancelled_orders():
                     'ImageFileName': product_info['ImageFileName'],
                     'Product_Name': product_info['Product_Name'],
                     'Shipping_Fee': product_info['Shipping_Fee'],
-                    'Color': variation_info['Color'],
-                    'Size': variation_info['Size'],
+                    'Unit': variation_info['Unit'],
                     'Quantity': order['Quantity'],
                     'OrderID': order['OrderID'],
                     'Price': variation_info['Price'],
