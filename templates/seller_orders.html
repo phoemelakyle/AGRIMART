@@ -127,6 +127,13 @@
 
       <div class="product-info">
         <h1>ORDER DETAILS</h1>
+        <form method="get"  class="sort-form">
+                <label for="sort">Sort by:</label>
+                  <select name="sort" id="sort" onchange="this.form.submit()">
+                    <option value="recent" {% if request.args.get('sort') == 'recent' %}selected{% endif %}>Recent</option>
+                    <option value="old" {% if request.args.get('sort') == 'old' %}selected{% endif %}>Old</option>
+                  </select>
+                </form>
         {% if order_details %}
           <table class="variation-table">
             <thead>
@@ -182,6 +189,9 @@
                   {% endif %}
                 </td>
               </tr>
+              <tr>
+                    <td colspan="10" id="var-date"><b>Order Date & Time: </b>{{ order_detail['Order_Date'] }}</td>
+                  </tr>
               {% endfor %}
             </tbody>
           </table>
