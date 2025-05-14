@@ -221,6 +221,7 @@ def cart():
 
     return render_template('cart.html', cart_items=cart_items)
 
+# CART QUANTITY
 @cart_app.route('/update_quantity', methods=['POST'])
 def update_quantity():
     try:
@@ -288,7 +289,9 @@ def process_checkout():
                 variation_id = eval(item_id)[1]
                 cart_quantity = eval(item_id)[5]
                 payment_option_id = payment_options.get(variation_id, '')
+
                 insert_into_buyer_order(user_id, item_id, shipping_address, product_total, payment_option_id)
+
                 insert_into_seller_order(seller_id, user_id, item_id, shipping_address, product_total, payment_option_id)
 
                 delete_item_from_cart(user_id, item_id)
@@ -296,7 +299,7 @@ def process_checkout():
 
             print("Data saved to the database.")
             return redirect('/homepage_buyer')
-        else:
+        else: 
             message = "Please select items and payment option first."
             return render_template('checkout.html', message=message)
 
