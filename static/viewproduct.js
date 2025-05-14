@@ -1,14 +1,14 @@
 var newQuantity = 1;
+var variationID = null; // Ensure variationID is defined globally
 document.addEventListener('DOMContentLoaded', function () {
-
     var unitButtons = document.querySelectorAll('.unit-button');
-    
     var priceButtons = document.querySelectorAll('.price-button');
     var addToCartButton = document.querySelector('.btn-addtocart');
-   
+
     var selectedUnit = null;
     var selectedSize = null;
     var response = null;
+
     unitButtons.forEach(function (unitButton) {
         unitButton.addEventListener('click', function () {
             selectedUnit = this.getAttribute('data-unit');
@@ -16,8 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
             updateProductInfo();
         });
     });
-
-    
 
     function updateSelected(clickedButton, allButtons) {
         allButtons.forEach(function (button) {
@@ -30,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateProductInfo() {
         if (selectedUnit) {
             console.log('Selected Unit:', selectedUnit);
-           
 
             fetch('/api/pro-var-unit', {
                 method: 'POST',
@@ -43,11 +40,10 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(response => response.json())
             .then(data => {
-               
                 if (data.status === 'success') {
                     variationID = data.VariationID;
                     console.log('VariationID:', variationID);
-      
+
                     return fetch('/api/insert-into-cart', {
                         method: 'POST',
                         headers: {
@@ -69,13 +65,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Error:', error);
             })
             .finally(() => {
-               
                 priceButtons.forEach(function (button) {
                     button.classList.add('unclickable');
                 });
-   
+
                 sendToServer(selectedUnit);
-   
+
                 fetch('/api/insert-into-cart', {
                     method: 'POST',
                     headers: {
@@ -87,7 +82,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .then(response => response.json())
                 .then(data => {
-                   
                     if (data.status === 'success') {
                         console.log('Variation inserted into cart successfully');
                     } else {
@@ -100,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     }
-   
+
     function sendToServer(unit) {
         var xhr = new XMLHttpRequest();
         var url = '/api/view-product-variation';
@@ -111,9 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
-                   
                     response = JSON.parse(xhr.responseText);
-                   
                     document.getElementById('quan-disp').innerHTML = `
                         <p>Stock: ${response.quantity}</p>
                     `;
@@ -122,9 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <span class="quantity-display">1</span>
                         <button id="quantity-plus" class="adjust-quantity" onclick="adjustQuantity(1)">+</button>
                     `;
-                   
                     document.getElementById('plusminuscart').style.display = 'block';
-               
                     highlightPriceButton(response.price);
                 } else {
                     console.error('Error:', xhr.status);
@@ -132,10 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         };
 
-        var data = JSON.stringify({
-            unit: unit
-        });
-
+        var data = JSON.stringify({ unit: unit });
         xhr.send(data);
     }
 
@@ -154,21 +141,24 @@ document.addEventListener('DOMContentLoaded', function () {
         var currentQuantity = parseInt(quantityDisplay.innerText);
         newQuantity = currentQuantity + amount;
 
-        console.log('Adjusting quantity by:', amount);
-        console.log('Current Quantity:', currentQuantity);
-        console.log('New Quantity:', newQuantity);
-
         newQuantity = (newQuantity < 1) ? 1 : (newQuantity > response.quantity) ? response.quantity : newQuantity;
-
         quantityDisplay.textContent = newQuantity;
-
-        console.log('Final Quantity:', newQuantity);
     };
 
-    addToCartButton.addEventListener('click', function () {
-        var productId = addToCartButton.getAttribute('data-product-id');
+    function showCartNotification(message) {
+        var notif = document.getElementById('cart-notification');
+        notif.textContent = message;
+        notif.classList.add('show');
 
-        console.log('ProductID:', productId);
+        setTimeout(function () {
+            notif.classList.remove('show');
+        }, 2500);
+    }
+
+    addToCartButton.addEventListener('click', function () {
+        showCartNotification('Item added to cart!');
+
+        var productId = addToCartButton.getAttribute('data-product-id');
 
         var data = {
             productID: productId,
@@ -185,7 +175,6 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(response => response.json())
         .then(data => {
-           
             console.log('Response from server:', data);
         })
         .catch(error => {
@@ -193,11 +182,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    document.getElementById('quantity-minus').addEventListener('click', function () {
-        adjustQuantity(-1);
-    });
-
-    document.getElementById('quantity-plus').addEventListener('click', function () {
-        adjustQuantity(1);
+    document.addEventListener('click', function (e) {
+        if (e.target && e.target.id === 'quantity-minus') adjustQuantity(-1);
+        if (e.target && e.target.id === 'quantity-plus') adjustQuantity(1);
     });
 });

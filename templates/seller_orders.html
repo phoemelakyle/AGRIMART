@@ -41,8 +41,6 @@
     <div class="user-dropdown" id="userDropdown">
       <span class="user" id="userIcon"><i class="fas fa-user"></i></span>
       <div class="user-menu" id="userMenu">
-        <a href="#">Profile</a>
-        <a href="#">Settings</a>
         <form action="{{ url_for('homepage_seller.logout') }}" method="post">
           <button class="logout-btn" type="submit">Logout</button>
         </form>
@@ -87,35 +85,35 @@
         <h3>STATUS</h3>
         <div class="status-tracker">
           <form action="{{ url_for('seller_orders.unpaid_orders') }}" method="get" class="step">
-            <button type="submit" class="circle {% if active_status == 'unpaid' %}active-status{% endif %}">
+            <button type="submit" class="circle {% if order_type == 'unpaid' %}active-status{% endif %}">
               <i class="fas fa-wallet"></i>
             </button>
             <p>Unpaid</p>
           </form>
      
           <form action="{{ url_for('seller_orders.to_ship_orders') }}" method="get" class="step">
-            <button type="submit" class="circle {% if active_status == 'to_ship' %}active-status{% endif %}">
+            <button type="submit" class="circle {% if order_type == 'to_ship' %}active-status{% endif %}">
               <i class="fas fa-box"></i>
             </button>
             <p><strong>To Ship</strong></p>
           </form>
      
           <form action="{{ url_for('seller_orders.shipping_orders') }}" method="get" class="step">
-            <button type="submit" class="circle {% if active_status == 'shipping' %}active-status{% endif %}">
+            <button type="submit" class="circle {% if order_type == 'shipping' %}active-status{% endif %}">
               <i class="fas fa-truck"></i>
             </button>
             <p>Shipping</p>
           </form>
      
           <form action="{{ url_for('seller_orders.delivered_orders') }}" method="get" class="step">
-            <button type="submit" class="circle {% if active_status == 'delivered' %}active-status{% endif %}">
+            <button type="submit" class="circle {% if order_type == 'delivered' %}active-status{% endif %}">
               <i class="fas fa-check-circle"></i>
             </button>
             <p>Completed</p>
           </form>
      
           <form action="{{ url_for('seller_orders.cancelled_orders') }}" method="get" class="step">
-            <button type="submit" class="circle {% if active_status == 'cancelled' %}active-status{% endif %}">
+            <button type="submit" class="circle {% if order_type == 'cancelled' %}active-status{% endif %}">
               <i class="fas fa-times-circle"></i>
             </button>
             <p>Cancelled</p>

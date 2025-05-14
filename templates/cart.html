@@ -22,12 +22,10 @@
     <nav class="nav-menu">
       <ul>
         <li><a href="/homepage_buyer">Home</a></li>
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Contact Us</a></li>
+        <li><a href="#contacts">Contacts</a></li>
       </ul>
     </nav>
     
-
   <nav class="main-nav">
     <ul class="breadcrumb">
       <li><a href="/homepage_buyer"><i class="fas fa-home"></i></a></li>
@@ -43,8 +41,6 @@
       <div class="user-dropdown" id="userDropdown">
         <span class="user" id="userIcon"><i class="fas fa-user"></i></span>
         <div class="user-menu" id="userMenu">
-          <a href="#">Profile</a>
-          <a href="#">Settings</a>
           <form action="{{ url_for('homepage_buyer.logout') }}" method="post">
             <button class="logout-btn" type="submit">Logout</button>
           </form>

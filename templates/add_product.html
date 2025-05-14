@@ -20,19 +20,19 @@
     </header>
   
     <!-- Navigation Menu -->
-    <nav class="nav-menu">
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Contact Us</a></li>
-        </ul>
-    </nav>
-    
+  <!-- Navigation Menu -->
+  <nav class="nav-menu">
+    <ul>
+      <li><a href="/homepage_seller">Home</a></li>
+      <li><a href="#contacts">Contacts</a></li>
+    </ul>
+  </nav>
+ 
     <!-- Breadcrumb Navigation -->
     <nav class="main-nav">
         <ul class="breadcrumb">
-            <li><a href="/index"><i class="fas fa-home"></i></a></li>
-            <li>›</li>
+          <li><a href="/homepage_seller"> <i class="fas fa-home"></i></a></li>
+          <li>›</li>
             <li>
                 <a href="/homepage_seller" class="button">Homepage Seller</a>
             </li>
@@ -40,17 +40,16 @@
     
         <div class="icons">
             <div class="user-dropdown" id="userDropdown">
-                <span class="user" id="userIcon"><i class="fas fa-user"></i></span>
-                <div class="user-menu" id="userMenu">
-                    <a href="#">Profile</a>
-                    <a href="#">Settings</a>
-                    <form action="{{ url_for('homepage_seller.logout') }}" method="post">
-                        <button class="logout-btn" type="submit">Logout</button>
-                    </form>
-                </div>
+              <span class="user" id="userIcon"><i class="fas fa-user"></i></span>
+              <div class="user-menu" id="userMenu">
+                <form action="{{ url_for('homepage_seller.logout') }}" method="post">
+                  <button class="logout-btn" type="submit">Logout</button>
+                </form>
+              </div>
             </div>
-        </div>
-    </nav>
+          </div>
+        </nav>
+       
     
     <div class="container">
         <aside class="sidebar">
@@ -100,10 +99,10 @@
                             <tr>
                                 <th>Image</th>
                                 <th>Product</th>
-                                <th>Weight</th>
-                                <th>Packaging Length</th>
-                                <th>Packaging Width</th>
-                                <th>Packaging Height</th>
+                                <th>Weight (per piece)</th>
+                                <th>Packaging Length (cm)</th>
+                                <th>Packaging Width (cm)</th>
+                                <th>Packaging Height (cm)</th>
                                 <th>Category</th>
                                 <th>Shipping Fee</th>
                                 
@@ -266,6 +265,24 @@
             </div>
         </div>
     </footer>
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const userIcon = document.getElementById('userIcon');
+          const userMenu = document.getElementById('userMenu');
+     
+          userIcon.addEventListener('click', function (event) {
+            userMenu.classList.toggle('show');
+            event.stopPropagation(); // Prevents event from bubbling up
+          });
+     
+          // Close the dropdown if clicked outside
+          document.addEventListener('click', function (event) {
+            if (!userMenu.contains(event.target)) {
+              userMenu.classList.remove('show');
+            }
+          });
+        });
+      </script>
+   
 </body>
 </html>

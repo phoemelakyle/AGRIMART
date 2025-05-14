@@ -43,14 +43,11 @@
         <span class="cart">
           <a href="{{ url_for('cart.cart') }}" class="cart-link">
             <i class="fas fa-shopping-cart"></i>
-            <span class="badge">2</span>
           </a>
         </span>
         <div class="user-dropdown" id="userDropdown">
             <span class="user" id="userIcon"><i class="fas fa-user"></i></span>
             <div class="user-menu" id="userMenu">
-              <a href="#">Profile</a>
-              <a href="#">Settings</a>
               <form action="{{ url_for('homepage_buyer.logout') }}" method="post">
                 <button class="logout-btn" type="submit">Logout</button>
               </form>
@@ -90,43 +87,18 @@
     </div>
 
 
-    <!-- Redesigned STATUS Section -->
+    <!-- Buyer Menu -->
     <div class="status">
-      <h3>STATUS</h3>
+      <h3>BUYER MENU</h3>
       <ul class="status-list">
         <li>
+          <form action="/homepage_buyer" method="get">
+            <button type="submit" class="status-item"><i class="fas fa-home"></i> Homepage</button>
+          </form>
+        </li>
+        <li>
           <form action="{{ url_for('homepage_buyer.to_pay_orders') }}" method="get">
-            <button type="submit" class="status-item">
-              <i class="fas fa-wallet"></i> To Pay
-            </button>
-          </form>
-        </li>
-        <li>
-          <form action="{{ url_for('homepage_buyer.to_ship_orders') }}" method="get">
-            <button type="submit" class="status-item">
-              <i class="fas fa-box"></i> To Ship
-            </button>
-          </form>
-        </li>
-        <li>
-          <form action="{{ url_for('homepage_buyer.shipping_orders') }}" method="get">
-            <button type="submit" class="status-item">
-              <i class="fas fa-truck"></i> Shipping
-            </button>
-          </form>
-        </li>
-        <li>
-          <form action="{{ url_for('homepage_buyer.delivered_orders') }}" method="get">
-            <button type="submit" class="status-item">
-              <i class="fas fa-check-circle"></i> Delivered
-            </button>
-          </form>
-        </li>
-        <li>
-          <form action="{{ url_for('homepage_buyer.cancelled_orders') }}" method="get">
-            <button type="submit" class="status-item">
-              <i class="fas fa-times-circle"></i> Cancelled
-            </button>
+            <button type="submit" class="status-item"><i class="fas fa-receipt"></i> Orders</button>
           </form>
         </li>
       </ul>
@@ -230,6 +202,34 @@
     </div>
   </div>
 </footer>
+
+ <!-- JavaScript -->
+ <script>
+  document.querySelectorAll('.category-option input[type="radio"]').forEach(radio => {
+    radio.addEventListener('change', function () {
+      this.closest('form').submit();
+    });
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const userIcon = document.getElementById('userIcon');
+    const userMenu = document.getElementById('userMenu');
+
+    userIcon.addEventListener('click', function (event) {
+      userMenu.classList.toggle('show');
+      event.stopPropagation(); // Prevents event from bubbling up
+    });
+
+    // Close the dropdown if clicked outside
+    document.addEventListener('click', function (event) {
+      if (!userMenu.contains(event.target)) {
+        userMenu.classList.remove('show');
+      }
+    });
+  });
+</script>
+
 </body>
 </html>
 
