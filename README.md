@@ -8,13 +8,13 @@
 
 <div style="text-align: center;">
   <h1 style="margin: 0;">Agrimart</h1>  
-  <p style="margin: 0; font-style: italic;">Grow Local. Eat Fresh. Live Sustainable.</p>
+  <p style="margin: 0; font-style: italic;">Connecting You to Local Farmers.</p>
 </div>
 
 ---
 >### <h2> 📑 Table of Contents </h2>
 1. [Introduction](#introduction)  
-2. [App Preview](#app-preview)  
+2. [System Preview](#app-preview)  
 3. [Features](#features)  
    - [👥 User Role Selection & Registration](#user-role-selection--registration)  
    - [🏪 Seller Features](#seller-features)  
@@ -40,7 +40,7 @@
 ---
 
 <div id="app-preview" align="center">
-  <h2>📱 App Preview</h2>
+  <h2>📱 System Preview</h2>
   <p>Take a look at Agrimart in action:</p>
 
   <!-- Landing Page -->
@@ -119,45 +119,44 @@
 <ul>
   <li><strong>Role Choice:</strong> Select either  <code>Buyer</code> or <code>Seller</code> at signup.</li>
   <li><strong>Separate Flows:</strong> Distinct registration forms and dashboards for buyers and sellers.</li>
-  <li><strong>Secure Login:</strong> Email/password or OAuth with encrypted sessions.</li>
+  <li><strong>Secure Login:</strong> Local authentication using email and hashed passwords (Flask with MySQL via XAMPP). User sessions are securely managed using Flask’s encrypted session cookies.</li>
 </ul>
 
 <h3 id="seller-features">🏪 Seller Features</h3>
 <ul>
-  <li><strong>Seller Dashboard:</strong> View, search, and manage your product listings.</li>
-  <li><strong>Add Products:</strong> Upload name, description, price, stock level, and images.</li>
+  <li><strong>Seller Dashboard:</strong> View and manage your product listings.</li>
+  <li><strong>Add Products:</strong> Upload name, description, price, stock level, images, and its variations.</li>
   <li><strong>Edit/Delete Products:</strong> Modify details or remove items with one click.</li>
-  <li><strong>Payment Preferences:</strong> Configure accepted methods (e.g., Cash on Delivery, GCash, PayMaya).</li>
+  <li><strong>Payment Preferences:</strong> Configure accepted methods (e.g., Cash on Delivery, GCash, PayMaya, etc.).</li>
 </ul>
 
 <h3 id="buyer-features">🛒 Buyer Features</h3>
 <ul>
   <li><strong>Buyer Homepage:</strong> Browse all available products with thumbnails and prices.</li>
-  <li><strong>Product Filtering:</strong> Narrow listings by category, price range, or seller rating.</li>
-  <li><strong>Product Detail View:</strong> Full description, image gallery, stock status, and seller info.</li>
+  <li><strong>Product Filtering:</strong> Narrow listings by different categories.</li>
+  <li><strong>Product Detail View:</strong> Product name, image, stock, and variation.</li>
   <li><strong>Add to Cart:</strong> Select variants and quantities, then add to shopping cart.</li>
 </ul>
 
 <h3 id="cart--checkout-system">🛍️ Cart & Checkout System</h3>
 <ul>
-  <li><strong>Cart Management:</strong> Update quantities, remove items, and view subtotals in real time.</li>
+  <li><strong>Cart Management:</strong> Update quantities and remove items.</li>
   <li><strong>Checkout Flow:</strong> Confirm shipping address, select payment method, and place order.</li>
-  <li><strong>Order Confirmation:</strong> Receive instant confirmation and order summary email.</li>
+  <li><strong>Order Confirmation:</strong> Users can go to the Orders section where they can track the status of their order.</li>
 </ul>
 
 <h3 id="uiux--visual-assets">🎨 UI/UX & Visual Assets</h3>
 <ul>
   <li><strong>Modular CSS:</strong> Page-specific styles for consistency and maintainability.</li>
   <li><strong>Interactive JS:</strong> `viewproduct.js` and others enhance UX with dynamic behaviors.</li>
-  <li><strong>Branding Assets:</strong> Logos, icons, and illustrations kept in `static/assets/`.</li>
+  <li><strong>Branding Assets:</strong> Logos, icons, and illustrations kept in `static/images/`.</li>
 </ul>
 
 <h3 id="image-management">🖼️ Image Management</h3>
 <ul>
-  <li><strong>Product Images:</strong> Stored under `products/` directory, optimized for web delivery.</li>
+  <li><strong>Product Images:</strong> Stored under `static/images/products/` directory, optimized for web delivery.</li>
   <li><strong>Shared Assets:</strong> Centralized `static/images/` for icons, banners, and logos.</li>
-  <li><strong>Lazy Loading:</strong> Improves page performance by loading images on scroll.</li>
-</ul>
+ 
 
 
 ><h2 id="technologies-used">🖥️ Technologies Used</h2>
