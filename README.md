@@ -32,7 +32,9 @@
 >### <h2 id="introduction">🚀 Introduction</h2>
 
   <p style="text-align: justify; text-indent: 2em;">
-  <strong>Agrimart</strong> is a digital marketplace connecting Filipino farmers directly with buyers. Sellers can list fresh produce with images and pricing, while buyers can browse, filter, and purchase items seamlessly. With secure authentication, flexible payment options, and a responsive UI, Agrimart streamlines farm-to-table commerce.
+  <strong>Agrimart</strong> is an online platform that connects Filipino farmers straight to buyers. It lets farmers post their fresh produce with photos and prices, and gives buyers a simple way to browse, add to cart, and order. The system includes secure login, role selection, flexible payment methods, and a user-friendly interface. Agrimart aims to support local farmers by making it easier for them to sell directly, while helping consumers access fresh, local products more easily.
+
+
 </p>
 
 ---
