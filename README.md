@@ -368,7 +368,6 @@ ALTER TABLE Buyer ADD COLUMN reset_token VARCHAR(255);
     🛡️Agrimart Developers
 </h2>
 
-<div align="center">
 
 | **Photo**                                   | **Name**                          | **GitHub**                                          | **Facebook**                                   |
 |---------------------------------------------|-----------------------------------|-----------------------------------------------------|------------------------------------------------|
@@ -377,7 +376,6 @@ ALTER TABLE Buyer ADD COLUMN reset_token VARCHAR(255);
 | <img src="./readme_assets/liza.webp" alt="Liza" width="100"/>      | **Liza Loraine M. Ignacio**        | [lizaloraine](https://github.com/lizaloraine)          | [liza.lorainee](https://www.facebook.com/liza.lorainee) |
 | <img src="./readme_assets/phem.webp" alt="Phoemela" width="100"/> | **Phoemela Kyle M. Sebastian**     | [phoemelakyle](https://github.com/phoemelakyle)        | [phoemelakyle](https://www.facebook.com/phoemelakyle) |
 
-</div>
 
   
 <div style="border: 2px solid #ccc; padding: 15px; border-radius: 10px; margin-bottom: 20px; margin-top: 20px;">
