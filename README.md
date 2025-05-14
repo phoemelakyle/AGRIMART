@@ -39,16 +39,43 @@
 
 <div id="app-preview" align="center">
   <h2>📱 App Preview</h2>
-  
   <p>Take a look at Agrimart in action:</p>
-  
-  <!-- Agrimart Homepage -->
- > <h4>AGRIMART HOMEPAGE</h4>
-  <img src="./readme_assets/homepage.png" alt="Agrimart Homepage" style="max-width:100%; margin:10px 0;">
 
-  <!-- Agrimart Cart Demo -->
-  ><h4>AGRIMART CART DEMO</h4>
-  <img src="./readme_assets/mycart.png" alt="Agrimart Cart Demo" style="max-width:100%; margin:10px 0;">
+  <!-- Landing Page -->
+  <h4>🌾 Agrimart Landing Page</h4>
+  <img src="./readme_assets/landing_page.jpeg" alt="Landing Page" style="max-width:100%; margin:10px 0;">
+
+  <!-- Role Selection -->
+  <h4>👥 Select Role Page</h4>
+  <img src="./readme_assets/select_role.jpeg" alt="Select Role" style="max-width:100%; margin:10px 0;">
+
+  <!-- Login -->
+  <h4>🔐 User Login Interface</h4>
+  <img src="./readme_assets/login.jpeg" alt="Login Page" style="max-width:100%; margin:10px 0;">
+
+  <!-- Buyer Homepage -->
+  <h4>🛍️ Buyer Homepage Dashboard</h4>
+  <img src="./readme_assets/homepage_buyer.jpeg" alt="Buyer Homepage" style="max-width:100%; margin:10px 0;">
+
+  <!-- Cart -->
+  <h4>🛒 Shopping Cart Overview</h4>
+  <img src="./readme_assets/cart.jpeg" alt="Cart" style="max-width:100%; margin:10px 0;">
+
+  <!-- Checkout -->
+  <h4>✅ Checkout Summary Page</h4>
+  <img src="./readme_assets/checkout.jpeg" alt="Checkout" style="max-width:100%; margin:10px 0;">
+
+  <!-- Payment Option -->
+  <h4>💳 Payment Options Selection</h4>
+  <img src="./readme_assets/payment_option.jpeg" alt="Payment Options" style="max-width:100%; margin:10px 0;">
+
+  <!-- Seller Homepage -->
+  <h4>📈 Seller Homepage Dashboard</h4>
+  <img src="./readme_assets/homepage_seller.jpeg" alt="Seller Homepage" style="max-width:100%; margin:10px 0;">
+
+  <!-- Add Product -->
+  <h4>➕ Add New Product Interface</h4>
+  <img src="./readme_assets/add_product.jpeg" alt="Add Product" style="max-width:100%; margin:10px 0;">
 </div>
 
 ><h2 id="features">🛠️ Features</h2>
