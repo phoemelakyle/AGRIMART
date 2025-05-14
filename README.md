@@ -32,23 +32,52 @@
 >### <h2 id="introduction">🚀 Introduction</h2>
 
   <p style="text-align: justify; text-indent: 2em;">
-  <strong>Agrimart</strong> is a digital marketplace connecting Filipino farmers directly with buyers. Sellers can list fresh produce with images and pricing, while buyers can browse, filter, and purchase items seamlessly. With secure authentication, flexible payment options, and a responsive UI, Agrimart streamlines farm-to-table commerce.
+  <strong>Agrimart</strong> is an online platform that connects Filipino farmers straight to buyers. It lets farmers post their fresh produce with photos and prices, and gives buyers a simple way to browse, add to cart, and order. The system includes secure login, role selection, flexible payment methods, and a user-friendly interface. Agrimart aims to support local farmers by making it easier for them to sell directly, while helping consumers access fresh, local products more easily.
+
+
 </p>
 
 ---
 
 <div id="app-preview" align="center">
   <h2>📱 App Preview</h2>
-  
   <p>Take a look at Agrimart in action:</p>
-  
-  <!-- Agrimart Homepage -->
- > <h4>AGRIMART HOMEPAGE</h4>
-  <img src="./readme_assets/homepage.png" alt="Agrimart Homepage" style="max-width:100%; margin:10px 0;">
 
-  <!-- Agrimart Cart Demo -->
-  ><h4>AGRIMART CART DEMO</h4>
-  <img src="./readme_assets/mycart.png" alt="Agrimart Cart Demo" style="max-width:100%; margin:10px 0;">
+  <!-- Landing Page -->
+  <h4>🌾 Agrimart Landing Page</h4>
+  <img src="./readme_assets/landing_page.jpeg" alt="Landing Page" style="max-width:100%; margin:10px 0;">
+
+  <!-- Role Selection -->
+  <h4>👥 Select Role Page</h4>
+  <img src="./readme_assets/select_role.jpeg" alt="Select Role" style="max-width:100%; margin:10px 0;">
+
+  <!-- Login -->
+  <h4>🔐 User Login Interface</h4>
+  <img src="./readme_assets/login.jpeg" alt="Login Page" style="max-width:100%; margin:10px 0;">
+
+  <!-- Buyer Homepage -->
+  <h4>🛍️ Buyer Homepage Dashboard</h4>
+  <img src="./readme_assets/homepage_buyer.jpeg" alt="Buyer Homepage" style="max-width:100%; margin:10px 0;">
+
+  <!-- Cart -->
+  <h4>🛒 Shopping Cart Overview</h4>
+  <img src="./readme_assets/cart.jpeg" alt="Cart" style="max-width:100%; margin:10px 0;">
+
+  <!-- Checkout -->
+  <h4>✅ Checkout Summary Page</h4>
+  <img src="./readme_assets/checkout.jpeg" alt="Checkout" style="max-width:100%; margin:10px 0;">
+
+  <!-- Payment Option -->
+  <h4>💳 Payment Options Selection</h4>
+  <img src="./readme_assets/payment_option.jpeg" alt="Payment Options" style="max-width:100%; margin:10px 0;">
+
+  <!-- Seller Homepage -->
+  <h4>📈 Seller Homepage Dashboard</h4>
+  <img src="./readme_assets/homepage_seller.jpeg" alt="Seller Homepage" style="max-width:100%; margin:10px 0;">
+
+  <!-- Add Product -->
+  <h4>➕ Add New Product Interface</h4>
+  <img src="./readme_assets/add_product.jpeg" alt="Add Product" style="max-width:100%; margin:10px 0;">
 </div>
 
 ><h2 id="features">🛠️ Features</h2>
@@ -339,7 +368,6 @@ ALTER TABLE Buyer ADD COLUMN reset_token VARCHAR(255);
     🛡️Agrimart Developers
 </h2>
 
-<div align="center">
 
 | **Photo**                                   | **Name**                          | **GitHub**                                          | **Facebook**                                   |
 |---------------------------------------------|-----------------------------------|-----------------------------------------------------|------------------------------------------------|
@@ -348,7 +376,6 @@ ALTER TABLE Buyer ADD COLUMN reset_token VARCHAR(255);
 | <img src="./readme_assets/liza.webp" alt="Liza" width="100"/>      | **Liza Loraine M. Ignacio**        | [lizaloraine](https://github.com/lizaloraine)          | [liza.lorainee](https://www.facebook.com/liza.lorainee) |
 | <img src="./readme_assets/phem.webp" alt="Phoemela" width="100"/> | **Phoemela Kyle M. Sebastian**     | [phoemelakyle](https://github.com/phoemelakyle)        | [phoemelakyle](https://www.facebook.com/phoemelakyle) |
 
-</div>
 
   
 <div style="border: 2px solid #ccc; padding: 15px; border-radius: 10px; margin-bottom: 20px; margin-top: 20px;">
