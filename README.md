@@ -78,6 +78,38 @@
   <!-- Add Product -->
   <h4>➕ Add New Product Interface</h4>
   <img src="./readme_assets/add_product.jpeg" alt="Add Product" style="max-width:100%; margin:10px 0;">
+
+  <!-- Buyer Orders: To Pay -->
+  <h4>💸 Buyer Orders - To Pay</h4>
+  <img src="./readme_assets/buyer_orders_to_pay.jpeg" alt="Buyer Orders To Pay" style="max-width:100%; margin:10px 0;">
+
+  <!-- Buyer Orders: To Ship -->
+  <h4>📦 Buyer Orders - To Ship</h4>
+  <img src="./readme_assets/buyer_orders_to_ship.jpeg" alt="Buyer Orders To Ship" style="max-width:100%; margin:10px 0;">
+
+  <!-- Buyer Orders: Delivered -->
+  <h4>📬 Buyer Orders - Delivered</h4>
+  <img src="./readme_assets/buyer_orders_delivered.jpeg" alt="Buyer Orders Delivered" style="max-width:100%; margin:10px 0;">
+
+  <!-- Buyer Orders: Cancelled -->
+  <h4>❌ Buyer Orders - Cancelled</h4>
+  <img src="./readme_assets/buyer_orders_cancelled.jpeg" alt="Buyer Orders Cancelled" style="max-width:100%; margin:10px 0;">
+
+  <!-- Seller Orders: Unpaid -->
+  <h4>💼 Seller Orders - Unpaid</h4>
+  <img src="./readme_assets/seller_orders_unpaid.jpeg" alt="Seller Orders Unpaid" style="max-width:100%; margin:10px 0;">
+
+  <!-- Seller Orders: Shipping -->
+  <h4>🚚 Seller Orders - Shipping</h4>
+  <img src="./readme_assets/seller_orders_shipping.jpeg" alt="Seller Orders Shipping" style="max-width:100%; margin:10px 0;">
+
+  <!-- Seller Orders: Completed -->
+  <h4>✅ Seller Orders - Completed</h4>
+  <img src="./readme_assets/seller_orders_completed.jpeg" alt="Seller Orders Completed" style="max-width:100%; margin:10px 0;">
+
+  <!-- Seller Orders: Cancelled -->
+  <h4>❌ Seller Orders - Cancelled</h4>
+  <img src="./readme_assets/seller_orders_cancelled.jpeg" alt="Seller Orders Cancelled" style="max-width:100%; margin:10px 0;">
 </div>
 
 ><h2 id="features">🛠️ Features</h2>
